@@ -7,64 +7,49 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-:root{
-  --black:#070709;--deep:#0d0d12;--surface:#13131a;--card:#1a1a24;
-  --border:#2a2a38;--accent:#e8ff00;--accent2:#ff4d00;--accent3:#00d4ff;
-  --text:#e8e8f0;--muted:#7070a0;--success:#00ff99;--warn:#ffaa00;--purple:#b066ff;
-}
+:root{--black:#070709;--deep:#0d0d12;--surface:#13131a;--card:#1a1a24;--border:#2a2a38;--accent:#e8ff00;--accent2:#ff4d00;--accent3:#00d4ff;--text:#e8e8f0;--muted:#7070a0;--success:#00ff99;--warn:#ffaa00;--purple:#b066ff;}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--black);color:var(--text);font-family:'Barlow Condensed',sans-serif;font-size:15px;height:100vh;display:flex;flex-direction:column;overflow:hidden;}
 
-/* ── PROVIDER BUTTONS ── */
-.provider-btn{flex:1;padding:10px 6px;background:var(--surface);border:1px solid var(--border);
-  color:var(--text);cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:12px;
-  font-weight:700;letter-spacing:1px;text-align:center;transition:all 0.15s;line-height:1.4;}
-.provider-btn:hover{border-color:var(--accent);color:var(--accent);}
-.provider-btn.active{border-color:var(--accent);background:rgba(232,255,0,0.08);color:var(--accent);}
-/* ── AUTH SCREEN ── */
-#authScreen{position:fixed;inset:0;background:var(--black);display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;}
-.auth-box{background:var(--deep);border:1px solid var(--border);border-top:3px solid var(--accent);padding:40px;width:380px;max-width:92vw;}
-.auth-logo{font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--accent);letter-spacing:3px;margin-bottom:4px;}
-.auth-sub{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:24px;}
-.auth-tabs{display:flex;gap:0;margin-bottom:20px;border-bottom:1px solid var(--border);}
-.auth-tab{flex:1;padding:8px;background:none;border:none;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;cursor:pointer;text-transform:uppercase;border-bottom:2px solid transparent;transition:all 0.15s;}
-.auth-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
-.auth-label{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:5px;display:block;}
-.auth-input{width:100%;background:var(--black);border:1px solid var(--border);color:var(--text);padding:11px 13px;font-family:'JetBrains Mono',monospace;font-size:13px;outline:none;margin-bottom:12px;transition:border-color 0.2s;}
-.auth-input:focus{border-color:var(--accent);}
-.auth-btn{width:100%;padding:12px;background:var(--accent);border:none;color:var(--black);font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;cursor:pointer;transition:background 0.15s;margin-top:4px;}
-.auth-btn:hover{background:#fff;}
-.auth-btn:disabled{background:var(--border);color:var(--muted);cursor:not-allowed;}
-.auth-msg{font-size:11px;font-family:'JetBrains Mono',monospace;margin-top:10px;padding:8px;display:none;line-height:1.5;}
-.auth-msg.error{color:var(--accent2);background:rgba(255,77,0,0.08);border:1px solid rgba(255,77,0,0.2);}
-.auth-msg.success{color:var(--success);background:rgba(0,255,153,0.08);border:1px solid rgba(0,255,153,0.2);}
-.auth-forgot{font-size:10px;color:var(--accent3);cursor:pointer;background:none;border:none;font-family:'JetBrains Mono',monospace;margin-top:6px;display:block;text-align:right;}
-.google-btn{display:flex;align-items:center;justify-content:center;background:#fff;color:#333;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:1px;border:2px solid #ddd;transition:all 0.15s;}
-.google-btn:hover{background:#f5f5f5;border-color:#bbb;}
-.auth-forgot:hover{text-decoration:underline;}
+/* LOGIN */
+#loginScreen{position:fixed;inset:0;background:var(--black);display:flex;align-items:center;justify-content:center;z-index:9999;}
+.login-box{background:var(--deep);border:1px solid var(--border);border-top:3px solid var(--accent);padding:44px 40px;width:360px;max-width:92vw;text-align:center;}
+.login-logo{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--accent);letter-spacing:3px;margin-bottom:4px;}
+.login-sub{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:28px;}
+.login-note{font-size:11px;color:var(--muted);margin-bottom:24px;line-height:1.6;padding:10px;background:rgba(232,255,0,0.03);border:1px solid var(--border);}
+.google-btn{width:100%;padding:13px;background:#fff;border:none;color:#333;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:1px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:background 0.15s;}
+.google-btn:hover{background:#f0f0f0;}
+.google-btn:disabled{opacity:0.6;cursor:not-allowed;}
+.login-msg{margin-top:14px;font-size:11px;font-family:'JetBrains Mono',monospace;padding:8px;display:none;line-height:1.5;}
+.login-msg.error{color:var(--accent2);background:rgba(255,77,0,0.08);border:1px solid rgba(255,77,0,0.2);}
 
-/* ── API KEY MODAL ── */
+/* API KEY */
 #apiModal{position:fixed;inset:0;background:rgba(7,7,9,0.95);display:none;align-items:center;justify-content:center;z-index:8888;}
-.modal-box{background:var(--deep);border:1px solid var(--border);border-top:3px solid var(--accent);padding:36px 40px;max-width:460px;width:90%;}
-.modal-logo{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent);letter-spacing:3px;margin-bottom:4px;}
-.modal-sub{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:20px;}
-.modal-label{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:5px;display:block;}
-.modal-input{width:100%;background:var(--black);border:1px solid var(--border);color:var(--text);padding:11px 13px;font-family:'JetBrains Mono',monospace;font-size:13px;outline:none;margin-bottom:8px;transition:border-color 0.2s;}
-.modal-input:focus{border-color:var(--accent);}
-.modal-hint{font-size:10px;color:var(--muted);margin-bottom:18px;line-height:1.5;}
-.modal-hint a{color:var(--accent3);text-decoration:none;}
-.modal-btn{width:100%;padding:12px;background:var(--accent);border:none;color:var(--black);font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;cursor:pointer;transition:background 0.15s;}
-.modal-btn:hover{background:#fff;}
-.modal-error{font-size:11px;color:var(--accent2);margin-top:8px;font-family:'JetBrains Mono',monospace;display:none;}
+.api-box{background:var(--deep);border:1px solid var(--border);border-top:3px solid var(--accent);padding:36px 40px;width:480px;max-width:92vw;}
+.api-title{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent);letter-spacing:3px;margin-bottom:4px;}
+.api-sub{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:20px;}
+.prov-tabs{display:flex;gap:6px;margin-bottom:16px;}
+.ptab{flex:1;padding:10px 6px;background:var(--surface);border:1px solid var(--border);color:var(--muted);cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;text-align:center;transition:all 0.15s;line-height:1.4;}
+.ptab:hover{border-color:var(--accent);color:var(--accent);}
+.ptab.active{border-color:var(--accent);background:rgba(232,255,0,0.08);color:var(--accent);}
+.prov-info{font-size:10px;color:var(--accent3);font-family:'JetBrains Mono',monospace;padding:6px 8px;background:rgba(0,212,255,0.06);border:1px solid rgba(0,212,255,0.15);margin-bottom:12px;}
+.api-label{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:5px;display:block;}
+.api-input{width:100%;background:var(--black);border:1px solid var(--border);color:var(--text);padding:11px 13px;font-family:'JetBrains Mono',monospace;font-size:13px;outline:none;margin-bottom:8px;transition:border-color 0.2s;}
+.api-input:focus{border-color:var(--accent);}
+.api-hint{font-size:10px;color:var(--muted);margin-bottom:16px;line-height:1.5;}
+.api-hint a{color:var(--accent3);text-decoration:none;}
+.api-btn{width:100%;padding:12px;background:var(--accent);border:none;color:var(--black);font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;cursor:pointer;transition:background 0.15s;}
+.api-btn:hover{background:#fff;}
+.api-error{font-size:11px;color:var(--accent2);margin-top:8px;font-family:'JetBrains Mono',monospace;display:none;}
 
-/* ── HEADER ── */
+/* HEADER */
 header{background:var(--deep);border-bottom:1px solid var(--border);padding:9px 18px;display:flex;align-items:center;gap:12px;flex-shrink:0;position:relative;overflow:hidden;}
 header::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent2),var(--accent),var(--purple),var(--accent3));background-size:400% 100%;animation:slide 4s linear infinite;}
 @keyframes slide{to{background-position:400% 0;}}
 .logo{width:38px;height:38px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:19px;color:var(--black);}
-.header-text h1{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:3px;color:var(--accent);}
-.header-text p{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;}
-.header-right{margin-left:auto;display:flex;align-items:center;gap:8px;}
+.htext h1{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:3px;color:var(--accent);}
+.htext p{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;}
+.hright{margin-left:auto;display:flex;align-items:center;gap:8px;}
 .badge{padding:2px 8px;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;}
 .bl99{background:var(--accent);color:var(--black);}
 .bgod{background:var(--accent2);color:#fff;}
@@ -72,10 +57,11 @@ header::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;back
 .user-chip{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--success);font-family:'JetBrains Mono',monospace;padding:3px 8px;border:1px solid rgba(0,255,153,0.25);}
 .udot{width:5px;height:5px;border-radius:50%;background:var(--success);animation:pulse 2s infinite;}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
-.logout-btn{padding:3px 8px;font-size:10px;font-family:'JetBrains Mono',monospace;background:transparent;border:1px solid rgba(255,77,0,0.35);color:var(--accent2);cursor:pointer;transition:all 0.15s;}
-.logout-btn:hover{background:rgba(255,77,0,0.1);}
+.logout-btn{padding:3px 8px;font-size:10px;font-family:'JetBrains Mono',monospace;background:transparent;border:1px solid rgba(255,77,0,0.35);color:var(--accent2);cursor:pointer;}
+.prov-chip{font-size:10px;font-family:'JetBrains Mono',monospace;padding:3px 8px;border:1px solid var(--border);color:var(--muted);cursor:pointer;transition:all 0.15s;}
+.prov-chip:hover{border-color:var(--accent);color:var(--accent);}
 
-/* ── MAIN ── */
+/* MAIN */
 .main{display:flex;flex:1;overflow:hidden;}
 .sidebar{width:195px;background:var(--deep);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;}
 .sidebar-sec{padding:10px 13px 6px;font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;border-bottom:1px solid var(--border);}
@@ -85,109 +71,93 @@ header::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;back
 .stage-item.done .snum{background:var(--success);color:var(--black);}
 .stage-item.disabled{opacity:0.28;}
 .snum{width:17px;height:17px;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;font-family:'JetBrains Mono',monospace;font-weight:700;flex-shrink:0;}
-.slabel{font-size:12px;font-weight:500;}
-.ssub{font-size:10px;color:var(--muted);}
+.slabel{font-size:12px;font-weight:500;}.ssub{font-size:10px;color:var(--muted);}
 .rules-box{border-top:1px solid var(--border);padding:8px 12px;}
 .rules-title{font-size:9px;color:var(--accent2);letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:5px;font-weight:700;}
 .rule-item{display:flex;align-items:flex-start;gap:5px;font-size:10px;color:var(--muted);margin-bottom:2px;}
-.ri{color:var(--accent2);flex-shrink:0;font-size:9px;}
-.rg{color:var(--success)!important;}
-.sb-progress-box{padding:8px 12px;border-top:1px solid var(--border);}
-.sb-progress-label{font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:3px;}
-.sb-progress-val{font-size:13px;font-family:'JetBrains Mono',monospace;color:var(--accent);font-weight:700;}
-.sb-progress-bar{height:3px;background:var(--border);margin-top:4px;overflow:hidden;}
-.sb-progress-fill{height:100%;background:var(--accent3);transition:width 0.4s;width:0%;}
-.sb-history{border-top:1px solid var(--border);padding:8px 12px;flex:1;overflow-y:auto;min-height:0;}
-.sb-history-title{font-size:9px;color:var(--accent3);letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:5px;font-weight:700;}
+.ri{color:var(--accent2);flex-shrink:0;font-size:9px;}.rg{color:var(--success)!important;}
+.sb-prog{padding:8px 12px;border-top:1px solid var(--border);}
+.sb-prog-label{font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:3px;}
+.sb-prog-val{font-size:13px;font-family:'JetBrains Mono',monospace;color:var(--accent);font-weight:700;}
+.sb-prog-bar{height:3px;background:var(--border);margin-top:4px;overflow:hidden;}
+.sb-prog-fill{height:100%;background:var(--accent3);transition:width 0.4s;width:0%;}
+.sb-hist{border-top:1px solid var(--border);padding:8px 12px;flex:1;overflow-y:auto;min-height:0;}
+.sb-hist-title{font-size:9px;color:var(--accent3);letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:5px;font-weight:700;}
 .sb-entry{display:flex;align-items:center;gap:5px;padding:3px 5px;margin-bottom:2px;background:var(--surface);border:1px solid var(--border);cursor:pointer;font-size:11px;}
 .sb-entry:hover{border-color:var(--accent3);}
 .sb-num{font-size:9px;font-family:'JetBrains Mono',monospace;color:var(--accent);font-weight:700;flex-shrink:0;}
 .sb-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted);}
-.sb-copy{padding:1px 5px;font-size:9px;font-family:'JetBrains Mono',monospace;background:transparent;border:1px solid var(--border);color:var(--muted);cursor:pointer;flex-shrink:0;}
-.sb-copy:hover{border-color:var(--accent);color:var(--accent);}
+.sb-cp{padding:1px 5px;font-size:9px;font-family:'JetBrains Mono',monospace;background:transparent;border:1px solid var(--border);color:var(--muted);cursor:pointer;flex-shrink:0;}
+.sb-cp:hover{border-color:var(--accent);color:var(--accent);}
 .sb-empty{font-size:10px;color:var(--muted);font-style:italic;}
 
-/* ── CHAT ── */
-.chat-container{flex:1;display:flex;flex-direction:column;overflow:hidden;}
-.chat-messages{flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth;}
-.chat-messages::-webkit-scrollbar{width:4px;}
-.chat-messages::-webkit-scrollbar-thumb{background:var(--border);}
+/* CHAT */
+.chat-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.chat-msgs{flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth;}
+.chat-msgs::-webkit-scrollbar{width:4px;}
+.chat-msgs::-webkit-scrollbar-thumb{background:var(--border);}
 .msg{max-width:94%;animation:msgIn 0.2s ease;}
 @keyframes msgIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
-.msg.user{align-self:flex-end;}
-.msg.agent{align-self:flex-start;}
-.msg-header{font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:3px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;display:flex;align-items:center;gap:6px;}
+.msg.user{align-self:flex-end;}.msg.agent{align-self:flex-start;}
+.msg-hdr{font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:3px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;display:flex;align-items:center;gap:6px;}
 .dot{width:5px;height:5px;border-radius:50%;}
-.msg.agent .dot{background:var(--accent);}
-.msg.user .dot{background:var(--accent3);}
+.msg.agent .dot{background:var(--accent);}.msg.user .dot{background:var(--accent3);}
 .msg-body{padding:11px 14px;line-height:1.7;font-size:14px;position:relative;}
 .msg.agent .msg-body{background:var(--card);border:1px solid var(--border);border-radius:0 4px 4px 4px;}
 .msg.user .msg-body{background:rgba(232,255,0,0.07);border:1px solid rgba(232,255,0,0.18);border-radius:4px 0 4px 4px;text-align:right;}
 .msg-body pre{background:var(--black);border:1px solid var(--border);padding:10px 12px;margin:8px 0;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.6;color:#c8c8e8;white-space:pre-wrap;word-break:break-word;}
-.msg-body strong{color:var(--accent);}
-.msg-body em{color:var(--accent3);}
+.msg-body strong{color:var(--accent);}.msg-body em{color:var(--accent3);}
 .msg-body code{background:var(--black);font-family:'JetBrains Mono',monospace;font-size:12px;padding:1px 5px;color:var(--accent);}
 .cp-btn{padding:3px 8px;font-size:10px;font-family:'JetBrains Mono',monospace;background:var(--surface);border:1px solid var(--border);color:var(--muted);cursor:pointer;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;transition:all 0.15s;}
 .cp-btn:hover{border-color:var(--accent);color:var(--accent);}
 .cp-btn.copied{border-color:var(--success);color:var(--success);}
-
-/* ── THINKING ── */
 .thinking{display:flex;align-items:center;gap:8px;padding:9px 12px;background:var(--card);border:1px solid var(--border);width:fit-content;}
 .thinking-dots{display:flex;gap:4px;}
 .thinking-dots span{width:5px;height:5px;background:var(--accent);border-radius:50%;animation:bounce 1s infinite;}
-.thinking-dots span:nth-child(2){animation-delay:0.15s;}
-.thinking-dots span:nth-child(3){animation-delay:0.3s;}
+.thinking-dots span:nth-child(2){animation-delay:0.15s;}.thinking-dots span:nth-child(3){animation-delay:0.3s;}
 @keyframes bounce{0%,80%,100%{transform:translateY(0);opacity:0.4}40%{transform:translateY(-5px);opacity:1}}
-.thinking-label{font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+.thinking-lbl{font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+.tok-warn{background:rgba(255,170,0,0.08);border:1px solid rgba(255,170,0,0.25);padding:7px 12px;font-size:11px;color:var(--warn);display:none;font-family:'JetBrains Mono',monospace;}
+.tok-warn.visible{display:block;}
 
-/* ── QUICK ACTIONS ── */
-.quick-actions{padding:6px 14px;display:flex;gap:5px;flex-wrap:wrap;border-top:1px solid var(--border);background:var(--deep);}
+/* ACTIONS + INPUT */
+.quick-acts{padding:6px 14px;display:flex;gap:5px;flex-wrap:wrap;border-top:1px solid var(--border);background:var(--deep);}
 .qbtn{padding:5px 10px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:transparent;border:1px solid var(--border);color:var(--muted);cursor:pointer;font-family:'Barlow Condensed',sans-serif;transition:all 0.15s;white-space:nowrap;}
 .qbtn:hover{border-color:var(--accent);color:var(--accent);background:rgba(232,255,0,0.05);}
 .qbtn.hl2{border-color:rgba(255,77,0,0.5);color:var(--accent2);}
 .qbtn.hlg{border-color:rgba(0,255,153,0.35);color:var(--success);}
 .qbtn:disabled{opacity:0.3;cursor:default;}
-
-/* ── INPUT ── */
 .input-zone{background:var(--deep);border-top:1px solid var(--border);flex-shrink:0;}
 .upload-strip{padding:6px 14px 0;display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
 .upload-btn{display:flex;align-items:center;gap:5px;padding:4px 10px;background:transparent;border:1px dashed var(--border);color:var(--muted);cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;transition:all 0.15s;flex-shrink:0;}
 .upload-btn:hover{border-color:var(--accent3);color:var(--accent3);}
 #fileInput{display:none;}
-.preview-strip{display:flex;gap:5px;flex-wrap:wrap;align-items:center;padding:3px 0;}
-.preview-item{position:relative;width:40px;height:40px;}
-.preview-item img{width:100%;height:100%;object-fit:cover;border:1px solid var(--accent3);}
-.remove-img{position:absolute;top:-4px;right:-4px;width:14px;height:14px;background:var(--accent2);border:none;cursor:pointer;font-size:9px;color:#fff;font-weight:700;border-radius:50%;display:flex;align-items:center;justify-content:center;}
-.preview-label{font-size:10px;color:var(--accent3);font-family:'JetBrains Mono',monospace;}
-.no-img-hint{font-size:11px;color:var(--muted);font-style:italic;}
+.prev-strip{display:flex;gap:5px;flex-wrap:wrap;align-items:center;padding:3px 0;}
+.prev-item{position:relative;width:40px;height:40px;}
+.prev-item img{width:100%;height:100%;object-fit:cover;border:1px solid var(--accent3);}
+.rm-img{position:absolute;top:-4px;right:-4px;width:14px;height:14px;background:var(--accent2);border:none;cursor:pointer;font-size:9px;color:#fff;font-weight:700;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+.prev-lbl{font-size:10px;color:var(--accent3);font-family:'JetBrains Mono',monospace;}
+.no-img{font-size:11px;color:var(--muted);font-style:italic;}
 .input-row{padding:8px 14px 11px;display:flex;gap:7px;align-items:flex-end;}
-.input-wrapper{flex:1;}
+.input-wrap{flex:1;}
 textarea{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:10px 13px;font-family:'Barlow Condensed',sans-serif;font-size:15px;resize:none;outline:none;min-height:44px;max-height:140px;line-height:1.5;transition:border-color 0.2s;}
 textarea:focus{border-color:var(--accent);}
 textarea::placeholder{color:var(--muted);}
 .input-meta{display:flex;justify-content:space-between;align-items:center;margin-top:3px;}
-.char-badge{padding:2px 6px;font-size:10px;font-family:'JetBrains Mono',monospace;border:1px solid var(--border);color:var(--muted);}
-.img-badge{font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--accent3);}
+.cbadge{padding:2px 6px;font-size:10px;font-family:'JetBrains Mono',monospace;border:1px solid var(--border);color:var(--muted);}
+.ibadge{font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--accent3);}
 .send-btn{width:44px;height:44px;background:var(--accent);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--black);transition:all 0.15s;flex-shrink:0;}
 .send-btn:hover{background:#fff;}
 .send-btn:disabled{background:var(--border);color:var(--muted);cursor:default;}
-.token-warning{background:rgba(255,170,0,0.08);border:1px solid rgba(255,170,0,0.25);padding:7px 12px;font-size:11px;color:var(--warn);display:none;font-family:'JetBrains Mono',monospace;}
-.token-warning.visible{display:block;}
-
-/* ── WELCOME ── */
 .welcome{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--accent);padding:14px 17px;}
 .welcome-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:var(--accent);margin-bottom:3px;}
 .welcome-sub{font-size:12px;color:var(--muted);letter-spacing:1px;margin-bottom:10px;}
 .wgrid{display:grid;grid-template-columns:1fr 1fr;gap:4px;}
 .wf{display:flex;align-items:center;gap:5px;font-size:12px;}
 .wf::before{content:'▸';color:var(--accent);font-size:10px;}
-
-/* ── FORM ── */
-.form-group{margin-bottom:12px;}
-.form-label{display:block;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;font-family:'JetBrains Mono',monospace;}
+.form-grp{margin-bottom:12px;}
+.form-lbl{display:block;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;font-family:'JetBrains Mono',monospace;}
 .form-btns{display:flex;flex-wrap:wrap;gap:5px;}
-
-/* ── TOAST ── */
 .toast{position:fixed;bottom:20px;right:20px;background:var(--success);color:var(--black);padding:8px 16px;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:1px;z-index:9999;animation:toastIn 0.2s ease;}
 @keyframes toastIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
@@ -197,70 +167,46 @@ textarea::placeholder{color:var(--muted);}
 </head>
 <body>
 
-<!-- AUTH SCREEN -->
-<div id="authScreen">
-  <div class="auth-box">
-    <div class="auth-logo">🎬 ANIMAÇÃO MASTER</div>
-    <div class="auth-sub">L99 GODMODE v6 · Acesso Exclusivo</div>
-    <div style="margin-bottom:20px;font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;line-height:1.6;padding:10px;border:1px solid var(--border);background:rgba(232,255,0,0.03);">
-      🔒 Acesso por convite.<br>Apenas e-mails autorizados podem entrar.
-    </div>
-    <button class="auth-btn google-btn" id="googleBtn" onclick="doGoogleLogin()">
-      <svg width="18" height="18" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:8px;"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">🎬 ANIMAÇÃO MASTER</div>
+    <div class="login-sub">L99 GODMODE v6 · Acesso Exclusivo</div>
+    <div class="login-note">🔒 Acesso por convite. Apenas e-mails autorizados podem entrar.</div>
+    <button class="google-btn" id="googleBtn" onclick="loginGoogle()">
+      <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
       Entrar com Google
     </button>
-    <div class="auth-msg" id="authMsg"></div>
+    <div class="login-msg" id="loginMsg"></div>
   </div>
 </div>
 
-<!-- API KEY MODAL -->
-<div id="apiModal" style="display:none;position:fixed;inset:0;background:rgba(7,7,9,0.95);align-items:center;justify-content:center;z-index:8888;">
-  <div class="modal-box" style="max-width:500px;">
-    <div class="modal-logo">🔑 CONFIGURAR API</div>
-    <div class="modal-sub">Escolha o provedor e insira sua key</div>
-
-    <!-- Provider selector -->
-    <div style="display:flex;gap:6px;margin-bottom:16px;">
-      <button class="provider-btn active" id="prov-anthropic" onclick="selectProvider('anthropic')">
-        <span style="font-size:16px;">🟣</span><br>Anthropic<br><span style="font-size:9px;color:var(--muted);">Claude</span>
-      </button>
-      <button class="provider-btn" id="prov-openai" onclick="selectProvider('openai')">
-        <span style="font-size:16px;">⚫</span><br>OpenAI<br><span style="font-size:9px;color:var(--muted);">GPT-4o</span>
-      </button>
-      <button class="provider-btn" id="prov-groq" onclick="selectProvider('groq')">
-        <span style="font-size:16px;">🟠</span><br>Groq<br><span style="font-size:9px;color:var(--muted);">Llama 3</span>
-      </button>
+<!-- API KEY -->
+<div id="apiModal">
+  <div class="api-box">
+    <div class="api-title">🔑 CONFIGURAR API</div>
+    <div class="api-sub">Escolha o provedor e insira sua chave</div>
+    <div class="prov-tabs">
+      <div class="ptab active" id="pt-anthropic" onclick="setProv('anthropic')">🟣<br>Anthropic<br><small>Claude</small></div>
+      <div class="ptab" id="pt-openai" onclick="setProv('openai')">⚫<br>OpenAI<br><small>GPT-4o</small></div>
+      <div class="ptab" id="pt-groq" onclick="setProv('groq')">🟠<br>Groq<br><small>Llama 3</small></div>
     </div>
-
-    <div id="providerInfo" style="font-size:10px;color:var(--accent3);font-family:JetBrains Mono,monospace;margin-bottom:10px;padding:6px 8px;background:rgba(0,212,255,0.06);border:1px solid rgba(0,212,255,0.15);"></div>
-
-    <label class="modal-label" id="keyLabel2">Sua API Key</label>
-    <input type="password" class="modal-input" id="apiKeyInput" placeholder="sk-ant-api03-..." autocomplete="off">
-    <div class="modal-hint" id="keyHint">
-      Obtenha em <a href="https://console.anthropic.com" target="_blank" id="keyLink">console.anthropic.com</a><br>
-      Salva só no seu navegador — nunca enviada a nenhum servidor.
-    </div>
-    <button class="modal-btn" onclick="saveApiKey()">▶ CONFIRMAR E COMEÇAR</button>
-    <div class="modal-error" id="modalError"></div>
+    <div class="prov-info" id="provInfo">Modelo: claude-sonnet-4-6 · Melhor qualidade de storytelling</div>
+    <label class="api-label">Sua API Key</label>
+    <input type="password" class="api-input" id="apiKeyIn" placeholder="sk-ant-api03-..." autocomplete="off">
+    <div class="api-hint">Obtenha em <a href="https://console.anthropic.com" target="_blank" id="apiLink">console.anthropic.com</a><br>Salva só no seu navegador — nunca enviada a terceiros.</div>
+    <button class="api-btn" onclick="saveKey()">▶ CONFIRMAR E COMEÇAR</button>
+    <div class="api-error" id="apiErr"></div>
   </div>
 </div>
 
 <header>
   <div class="logo">L9</div>
-  <div class="header-text">
-    <h1>ANIMAÇÃO MASTER AGENT</h1>
-    <p>Super Roteirista + Diretor Cinematográfico AI · v6.0</p>
-  </div>
-  <div class="header-right">
-    <div class="user-chip" id="userChip" style="display:none;">
-      <span class="udot"></span>
-      <span id="userEmail">—</span>
-      <button class="logout-btn" onclick="doLogout()">Sair</button>
-    </div>
-    <span class="badge" id="providerBadge" style="background:var(--surface);border:1px solid var(--border);color:var(--muted);cursor:pointer;" onclick="document.getElementById('apiModal').style.display='flex';selectProvider(currentProvider);" title="Trocar provedor">🔑 Anthropic</span>
-    <span class="badge bl99">L99</span>
-    <span class="badge bgod">GOD</span>
-    <span class="badge bv6">v6</span>
+  <div class="htext"><h1>ANIMAÇÃO MASTER AGENT</h1><p>Super Roteirista + Diretor Cinematográfico AI · v6.0</p></div>
+  <div class="hright">
+    <div class="prov-chip" id="provChip" onclick="document.getElementById('apiModal').style.display='flex';setProv(curProv)" title="Trocar provedor">🟣 Claude</div>
+    <div class="user-chip" id="userChip" style="display:none"><span class="udot"></span><span id="userEmail">—</span><button class="logout-btn" onclick="doLogout()">Sair</button></div>
+    <span class="badge bl99">L99</span><span class="badge bgod">GOD</span><span class="badge bv6">v6</span>
   </div>
 </header>
 
@@ -270,11 +216,11 @@ textarea::placeholder{color:var(--muted);}
     <div class="stage-list">
       <div class="stage-item active" id="s1"><div class="snum">1</div><div><div class="slabel">Coleta</div><div class="ssub">Configuração</div></div></div>
       <div class="stage-item disabled" id="s2"><div class="snum">2</div><div><div class="slabel">Personagens</div><div class="ssub">Estilo + Trava</div></div></div>
-      <div class="stage-item disabled" id="s3"><div class="snum">3</div><div><div class="slabel">5 Ideias</div><div class="ssub">Escolha o roteiro</div></div></div>
+      <div class="stage-item disabled" id="s3"><div class="snum">3</div><div><div class="slabel">5 Ideias</div><div class="ssub">Roteiro</div></div></div>
       <div class="stage-item disabled" id="s4"><div class="snum">4</div><div><div class="slabel">Roteiro</div><div class="ssub">Cronometrado</div></div></div>
       <div class="stage-item disabled" id="s5"><div class="snum">5</div><div><div class="slabel">Mapa</div><div class="ssub">Storyboards</div></div></div>
       <div class="stage-item disabled" id="s6"><div class="snum">6</div><div><div class="slabel">Storyboards</div><div class="ssub">Um por um</div></div></div>
-      <div class="stage-item disabled" id="s7"><div class="snum">7</div><div><div class="slabel">Prompts</div><div class="ssub">VEO 3.1 / Omni / Seedance</div></div></div>
+      <div class="stage-item disabled" id="s7"><div class="snum">7</div><div><div class="slabel">Prompts</div><div class="ssub">VEO / Omni / Seedance</div></div></div>
     </div>
     <div class="rules-box">
       <div class="rules-title">⚡ Regras Ativas</div>
@@ -282,1021 +228,42 @@ textarea::placeholder{color:var(--muted);}
       <div class="rule-item"><span class="ri">✗</span><span>Zero personagem duplo</span></div>
       <div class="rule-item"><span class="rg ri">✓</span><span>Falas PT-BR</span></div>
       <div class="rule-item"><span class="rg ri">✓</span><span>Sem limite de chars</span></div>
-      <div class="rule-item"><span class="rg ri">✓</span><span>Cortes orgânicos</span></div>
       <div class="rule-item"><span class="rg ri">✓</span><span>10 Camadas Storytelling</span></div>
     </div>
-    <div class="sb-progress-box">
-      <div class="sb-progress-label">Progresso</div>
-      <div class="sb-progress-val"><span id="sbDone">0</span> / <span id="sbTotal">?</span> Storyboards</div>
-      <div class="sb-progress-bar"><div class="sb-progress-fill" id="sbProgressFill"></div></div>
+    <div class="sb-prog">
+      <div class="sb-prog-label">Progresso</div>
+      <div class="sb-prog-val"><span id="sbDone">0</span> / <span id="sbTotal">?</span> Storyboards</div>
+      <div class="sb-prog-bar"><div class="sb-prog-fill" id="sbFill"></div></div>
     </div>
-    <div class="sb-history">
-      <div class="sb-history-title">📋 Gerados</div>
-      <div id="sbHistoryList"><div class="sb-empty">Nenhum ainda.</div></div>
+    <div class="sb-hist">
+      <div class="sb-hist-title">📋 Gerados</div>
+      <div id="sbList"><div class="sb-empty">Nenhum ainda.</div></div>
     </div>
   </div>
 
-  <div class="chat-container">
-    <div class="token-warning" id="tokenWarning">ℹ️ Conversa longa — histórico comprimido automaticamente.</div>
-    <div class="chat-messages" id="chatMessages"></div>
-    <div class="quick-actions">
+  <div class="chat-wrap">
+    <div class="tok-warn" id="tokWarn">ℹ️ Conversa longa — histórico comprimido automaticamente.</div>
+    <div class="chat-msgs" id="chatMsgs"></div>
+    <div class="quick-acts">
       <button class="qbtn hl2" onclick="reiniciar()">↺ Reiniciar</button>
-      <button class="qbtn hlg" onclick="qsend('Continuar para a próxima etapa.')">▶ Continuar</button>
-      <button class="qbtn" onclick="qsend('Quero as 5 ideias.')">💡 5 Ideias</button>
-      <button class="qbtn" onclick="qsend('Refazer o último storyboard com abordagem diferente.')">🔄 Refazer</button>
-      <button class="qbtn" id="btnIniciarGlobal" onclick="iniciarProjeto()" style="display:none;border-color:rgba(232,255,0,0.6);color:var(--accent);font-weight:900;">▶ Iniciar</button>
+      <button class="qbtn hlg" onclick="qs('Continuar para a próxima etapa.')">▶ Continuar</button>
+      <button class="qbtn" onclick="qs('Quero as 5 ideias.')">💡 5 Ideias</button>
+      <button class="qbtn" onclick="qs('Refazer o último storyboard com abordagem diferente.')">🔄 Refazer</button>
+      <button class="qbtn" id="btnIniciar" style="display:none;border-color:rgba(232,255,0,0.6);color:var(--accent);font-weight:900;" onclick="iniciarProj()">▶ Iniciar</button>
     </div>
     <div class="input-zone">
-      <div class="upload-strip" id="uploadStrip">
+      <div class="upload-strip" id="upStrip">
         <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
           Adicionar Imagem
         </button>
         <input type="file" id="fileInput" accept="image/*,.srt,.txt,.vtt" multiple onchange="handleFiles(event)">
-        <div class="preview-strip" id="previewStrip"><span class="no-img-hint">Nenhuma imagem anexada</span></div>
+        <div class="prev-strip" id="prevStrip"><span class="no-img">Nenhuma imagem anexada</span></div>
       </div>
       <div class="input-row">
-        <div class="input-wrapper">
-          <textarea id="userInput" placeholder="Descreva sua ideia ou use os botões acima..." rows="2" onkeydown="handleKey(event)" oninput="updateCount()"></textarea>
-          <div class="input-meta">
-            <span class="img-badge" id="imgBadge"></span>
-            <span class="char-badge" id="charBadge">0</span>
-          </div>
-        </div>
-        <button class="send-btn" id="sendBtn" onclick="sendMsg()">➤</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<style>
-:root{
-  --black:#070709;--deep:#0d0d12;--surface:#13131a;--card:#1a1a24;
-  --border:#2a2a38;--accent:#e8ff00;--accent2:#ff4d00;--accent3:#00d4ff;
-  --text:#e8e8f0;--muted:#7070a0;--success:#00ff99;--warn:#ffaa00;--purple:#b066ff;
-}
-*{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--black);color:var(--text);font-family:'Barlow Condensed',sans-serif;font-size:15px;height:100vh;display:flex;flex-direction:column;overflow:hidden;}
-
-/* ── PROVIDER BUTTONS ── */
-.provider-btn{flex:1;padding:10px 6px;background:var(--surface);border:1px solid var(--border);
-  color:var(--text);cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:12px;
-  font-weight:700;letter-spacing:1px;text-align:center;transition:all 0.15s;line-height:1.4;}
-.provider-btn:hover{border-color:var(--accent);color:var(--accent);}
-.provider-btn.active{border-color:var(--accent);background:rgba(232,255,0,0.08);color:var(--accent);}
-/* ── AUTH SCREEN ── */
-#authScreen{position:fixed;inset:0;background:var(--black);display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;}
-.auth-box{background:var(--deep);border:1px solid var(--border);border-top:3px solid var(--accent);padding:40px;width:380px;max-width:92vw;}
-.auth-logo{font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--accent);letter-spacing:3px;margin-bottom:4px;}
-.auth-sub{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:24px;}
-.auth-tabs{display:flex;gap:0;margin-bottom:20px;border-bottom:1px solid var(--border);}
-.auth-tab{flex:1;padding:8px;background:none;border:none;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;cursor:pointer;text-transform:uppercase;border-bottom:2px solid transparent;transition:all 0.15s;}
-.auth-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
-.auth-label{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:5px;display:block;}
-.auth-input{width:100%;background:var(--black);border:1px solid var(--border);color:var(--text);padding:11px 13px;font-family:'JetBrains Mono',monospace;font-size:13px;outline:none;margin-bottom:12px;transition:border-color 0.2s;}
-.auth-input:focus{border-color:var(--accent);}
-.auth-btn{width:100%;padding:12px;background:var(--accent);border:none;color:var(--black);font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;cursor:pointer;transition:background 0.15s;margin-top:4px;}
-.auth-btn:hover{background:#fff;}
-.auth-btn:disabled{background:var(--border);color:var(--muted);cursor:not-allowed;}
-.auth-msg{font-size:11px;font-family:'JetBrains Mono',monospace;margin-top:10px;padding:8px;display:none;line-height:1.5;}
-.auth-msg.error{color:var(--accent2);background:rgba(255,77,0,0.08);border:1px solid rgba(255,77,0,0.2);}
-.auth-msg.success{color:var(--success);background:rgba(0,255,153,0.08);border:1px solid rgba(0,255,153,0.2);}
-.auth-forgot{font-size:10px;color:var(--accent3);cursor:pointer;background:none;border:none;font-family:'JetBrains Mono',monospace;margin-top:6px;display:block;text-align:right;}
-.google-btn{display:flex;align-items:center;justify-content:center;background:#fff;color:#333;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:1px;border:2px solid #ddd;transition:all 0.15s;}
-.google-btn:hover{background:#f5f5f5;border-color:#bbb;}
-.auth-forgot:hover{text-decoration:underline;}
-
-/* ── API KEY MODAL ── */
-#apiModal{position:fixed;inset:0;background:rgba(7,7,9,0.95);display:none;align-items:center;justify-content:center;z-index:8888;}
-.modal-box{background:var(--deep);border:1px solid var(--border);border-top:3px solid var(--accent);padding:36px 40px;max-width:460px;width:90%;}
-.modal-logo{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent);letter-spacing:3px;margin-bottom:4px;}
-.modal-sub{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:20px;}
-.modal-label{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:5px;display:block;}
-.modal-input{width:100%;background:var(--black);border:1px solid var(--border);color:var(--text);padding:11px 13px;font-family:'JetBrains Mono',monospace;font-size:13px;outline:none;margin-bottom:8px;transition:border-color 0.2s;}
-.modal-input:focus{border-color:var(--accent);}
-.modal-hint{font-size:10px;color:var(--muted);margin-bottom:18px;line-height:1.5;}
-.modal-hint a{color:var(--accent3);text-decoration:none;}
-.modal-btn{width:100%;padding:12px;background:var(--accent);border:none;color:var(--black);font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;cursor:pointer;transition:background 0.15s;}
-.modal-btn:hover{background:#fff;}
-.modal-error{font-size:11px;color:var(--accent2);margin-top:8px;font-family:'JetBrains Mono',monospace;display:none;}
-
-/* ── HEADER ── */
-header{background:var(--deep);border-bottom:1px solid var(--border);padding:9px 18px;display:flex;align-items:center;gap:12px;flex-shrink:0;position:relative;overflow:hidden;}
-header::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent2),var(--accent),var(--purple),var(--accent3));background-size:400% 100%;animation:slide 4s linear infinite;}
-@keyframes slide{to{background-position:400% 0;}}
-.logo{width:38px;height:38px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:19px;color:var(--black);}
-.header-text h1{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:3px;color:var(--accent);}
-.header-text p{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;}
-.header-right{margin-left:auto;display:flex;align-items:center;gap:8px;}
-.badge{padding:2px 8px;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;}
-.bl99{background:var(--accent);color:var(--black);}
-.bgod{background:var(--accent2);color:#fff;}
-.bv6{background:var(--purple);color:#fff;}
-.user-chip{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--success);font-family:'JetBrains Mono',monospace;padding:3px 8px;border:1px solid rgba(0,255,153,0.25);}
-.udot{width:5px;height:5px;border-radius:50%;background:var(--success);animation:pulse 2s infinite;}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
-.logout-btn{padding:3px 8px;font-size:10px;font-family:'JetBrains Mono',monospace;background:transparent;border:1px solid rgba(255,77,0,0.35);color:var(--accent2);cursor:pointer;transition:all 0.15s;}
-.logout-btn:hover{background:rgba(255,77,0,0.1);}
-
-/* ── MAIN ── */
-.main{display:flex;flex:1;overflow:hidden;}
-.sidebar{width:195px;background:var(--deep);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;}
-.sidebar-sec{padding:10px 13px 6px;font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;border-bottom:1px solid var(--border);}
-.stage-list{padding:5px 0;}
-.stage-item{padding:6px 12px;display:flex;align-items:center;gap:8px;border-left:2px solid transparent;}
-.stage-item.active{background:rgba(232,255,0,0.06);border-left-color:var(--accent);}
-.stage-item.done .snum{background:var(--success);color:var(--black);}
-.stage-item.disabled{opacity:0.28;}
-.snum{width:17px;height:17px;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;font-family:'JetBrains Mono',monospace;font-weight:700;flex-shrink:0;}
-.slabel{font-size:12px;font-weight:500;}
-.ssub{font-size:10px;color:var(--muted);}
-.rules-box{border-top:1px solid var(--border);padding:8px 12px;}
-.rules-title{font-size:9px;color:var(--accent2);letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:5px;font-weight:700;}
-.rule-item{display:flex;align-items:flex-start;gap:5px;font-size:10px;color:var(--muted);margin-bottom:2px;}
-.ri{color:var(--accent2);flex-shrink:0;font-size:9px;}
-.rg{color:var(--success)!important;}
-.sb-progress-box{padding:8px 12px;border-top:1px solid var(--border);}
-.sb-progress-label{font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:3px;}
-.sb-progress-val{font-size:13px;font-family:'JetBrains Mono',monospace;color:var(--accent);font-weight:700;}
-.sb-progress-bar{height:3px;background:var(--border);margin-top:4px;overflow:hidden;}
-.sb-progress-fill{height:100%;background:var(--accent3);transition:width 0.4s;width:0%;}
-.sb-history{border-top:1px solid var(--border);padding:8px 12px;flex:1;overflow-y:auto;min-height:0;}
-.sb-history-title{font-size:9px;color:var(--accent3);letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:5px;font-weight:700;}
-.sb-entry{display:flex;align-items:center;gap:5px;padding:3px 5px;margin-bottom:2px;background:var(--surface);border:1px solid var(--border);cursor:pointer;font-size:11px;}
-.sb-entry:hover{border-color:var(--accent3);}
-.sb-num{font-size:9px;font-family:'JetBrains Mono',monospace;color:var(--accent);font-weight:700;flex-shrink:0;}
-.sb-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted);}
-.sb-copy{padding:1px 5px;font-size:9px;font-family:'JetBrains Mono',monospace;background:transparent;border:1px solid var(--border);color:var(--muted);cursor:pointer;flex-shrink:0;}
-.sb-copy:hover{border-color:var(--accent);color:var(--accent);}
-.sb-empty{font-size:10px;color:var(--muted);font-style:italic;}
-
-/* ── CHAT ── */
-.chat-container{flex:1;display:flex;flex-direction:column;overflow:hidden;}
-.chat-messages{flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth;}
-.chat-messages::-webkit-scrollbar{width:4px;}
-.chat-messages::-webkit-scrollbar-thumb{background:var(--border);}
-.msg{max-width:94%;animation:msgIn 0.2s ease;}
-@keyframes msgIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
-.msg.user{align-self:flex-end;}
-.msg.agent{align-self:flex-start;}
-.msg-header{font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:3px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;display:flex;align-items:center;gap:6px;}
-.dot{width:5px;height:5px;border-radius:50%;}
-.msg.agent .dot{background:var(--accent);}
-.msg.user .dot{background:var(--accent3);}
-.msg-body{padding:11px 14px;line-height:1.7;font-size:14px;position:relative;}
-.msg.agent .msg-body{background:var(--card);border:1px solid var(--border);border-radius:0 4px 4px 4px;}
-.msg.user .msg-body{background:rgba(232,255,0,0.07);border:1px solid rgba(232,255,0,0.18);border-radius:4px 0 4px 4px;text-align:right;}
-.msg-body pre{background:var(--black);border:1px solid var(--border);padding:10px 12px;margin:8px 0;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.6;color:#c8c8e8;white-space:pre-wrap;word-break:break-word;}
-.msg-body strong{color:var(--accent);}
-.msg-body em{color:var(--accent3);}
-.msg-body code{background:var(--black);font-family:'JetBrains Mono',monospace;font-size:12px;padding:1px 5px;color:var(--accent);}
-.cp-btn{padding:3px 8px;font-size:10px;font-family:'JetBrains Mono',monospace;background:var(--surface);border:1px solid var(--border);color:var(--muted);cursor:pointer;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;transition:all 0.15s;}
-.cp-btn:hover{border-color:var(--accent);color:var(--accent);}
-.cp-btn.copied{border-color:var(--success);color:var(--success);}
-
-/* ── THINKING ── */
-.thinking{display:flex;align-items:center;gap:8px;padding:9px 12px;background:var(--card);border:1px solid var(--border);width:fit-content;}
-.thinking-dots{display:flex;gap:4px;}
-.thinking-dots span{width:5px;height:5px;background:var(--accent);border-radius:50%;animation:bounce 1s infinite;}
-.thinking-dots span:nth-child(2){animation-delay:0.15s;}
-.thinking-dots span:nth-child(3){animation-delay:0.3s;}
-@keyframes bounce{0%,80%,100%{transform:translateY(0);opacity:0.4}40%{transform:translateY(-5px);opacity:1}}
-.thinking-label{font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;}
-
-/* ── QUICK ACTIONS ── */
-.quick-actions{padding:6px 14px;display:flex;gap:5px;flex-wrap:wrap;border-top:1px solid var(--border);background:var(--deep);}
-.qbtn{padding:5px 10px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:transparent;border:1px solid var(--border);color:var(--muted);cursor:pointer;font-family:'Barlow Condensed',sans-serif;transition:all 0.15s;white-space:nowrap;}
-.qbtn:hover{border-color:var(--accent);color:var(--accent);background:rgba(232,255,0,0.05);}
-.qbtn.hl2{border-color:rgba(255,77,0,0.5);color:var(--accent2);}
-.qbtn.hlg{border-color:rgba(0,255,153,0.35);color:var(--success);}
-.qbtn:disabled{opacity:0.3;cursor:default;}
-
-/* ── INPUT ── */
-.input-zone{background:var(--deep);border-top:1px solid var(--border);flex-shrink:0;}
-.upload-strip{padding:6px 14px 0;display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
-.upload-btn{display:flex;align-items:center;gap:5px;padding:4px 10px;background:transparent;border:1px dashed var(--border);color:var(--muted);cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;transition:all 0.15s;flex-shrink:0;}
-.upload-btn:hover{border-color:var(--accent3);color:var(--accent3);}
-#fileInput{display:none;}
-.preview-strip{display:flex;gap:5px;flex-wrap:wrap;align-items:center;padding:3px 0;}
-.preview-item{position:relative;width:40px;height:40px;}
-.preview-item img{width:100%;height:100%;object-fit:cover;border:1px solid var(--accent3);}
-.remove-img{position:absolute;top:-4px;right:-4px;width:14px;height:14px;background:var(--accent2);border:none;cursor:pointer;font-size:9px;color:#fff;font-weight:700;border-radius:50%;display:flex;align-items:center;justify-content:center;}
-.preview-label{font-size:10px;color:var(--accent3);font-family:'JetBrains Mono',monospace;}
-.no-img-hint{font-size:11px;color:var(--muted);font-style:italic;}
-.input-row{padding:8px 14px 11px;display:flex;gap:7px;align-items:flex-end;}
-.input-wrapper{flex:1;}
-textarea{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:10px 13px;font-family:'Barlow Condensed',sans-serif;font-size:15px;resize:none;outline:none;min-height:44px;max-height:140px;line-height:1.5;transition:border-color 0.2s;}
-textarea:focus{border-color:var(--accent);}
-textarea::placeholder{color:var(--muted);}
-.input-meta{display:flex;justify-content:space-between;align-items:center;margin-top:3px;}
-.char-badge{padding:2px 6px;font-size:10px;font-family:'JetBrains Mono',monospace;border:1px solid var(--border);color:var(--muted);}
-.img-badge{font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--accent3);}
-.send-btn{width:44px;height:44px;background:var(--accent);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--black);transition:all 0.15s;flex-shrink:0;}
-.send-btn:hover{background:#fff;}
-.send-btn:disabled{background:var(--border);color:var(--muted);cursor:default;}
-.token-warning{background:rgba(255,170,0,0.08);border:1px solid rgba(255,170,0,0.25);padding:7px 12px;font-size:11px;color:var(--warn);display:none;font-family:'JetBrains Mono',monospace;}
-.token-warning.visible{display:block;}
-
-/* ── WELCOME ── */
-.welcome{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--accent);padding:14px 17px;}
-.welcome-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:var(--accent);margin-bottom:3px;}
-.welcome-sub{font-size:12px;color:var(--muted);letter-spacing:1px;margin-bottom:10px;}
-.wgrid{display:grid;grid-template-columns:1fr 1fr;gap:4px;}
-.wf{display:flex;align-items:center;gap:5px;font-size:12px;}
-.wf::before{content:'▸';color:var(--accent);font-size:10px;}
-
-/* ── FORM ── */
-.form-group{margin-bottom:12px;}
-.form-label{display:block;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;font-family:'JetBrains Mono',monospace;}
-.form-btns{display:flex;flex-wrap:wrap;gap:5px;}
-
-/* ── TOAST ── */
-.toast{position:fixed;bottom:20px;right:20px;background:var(--success);color:var(--black);padding:8px 16px;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:1px;z-index:9999;animation:toastIn 0.2s ease;}
-@keyframes toastIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
-::-webkit-scrollbar{width:4px;}
-::-webkit-scrollbar-thumb{background:var(--border);}
-</style>
-</head>
-<body>
-
-<!-- AUTH SCREEN -->
-<div id="authScreen">
-  <div class="auth-box">
-    <div class="auth-logo">🎬 ANIMAÇÃO MASTER</div>
-    <div class="auth-sub">L99 GODMODE v6 · Acesso Exclusivo</div>
-    <div style="margin-bottom:20px;font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;line-height:1.6;padding:10px;border:1px solid var(--border);background:rgba(232,255,0,0.03);">
-      🔒 Acesso por convite.<br>Apenas e-mails autorizados podem entrar.
-    </div>
-    <button class="auth-btn google-btn" id="googleBtn" onclick="doGoogleLogin()">
-      <svg width="18" height="18" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:8px;"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-      Entrar com Google
-    </button>
-    <div class="auth-msg" id="authMsg"></div>
-  </div>
-</div>
-
-<!-- API KEY MODAL -->
-<div id="apiModal" style="display:none;position:fixed;inset:0;background:rgba(7,7,9,0.95);align-items:center;justify-content:center;z-index:8888;">
-  <div class="modal-box" style="max-width:500px;">
-    <div class="modal-logo">🔑 CONFIGURAR API</div>
-    <div class="modal-sub">Escolha o provedor e insira sua key</div>
-
-    <!-- Provider selector -->
-    <div style="display:flex;gap:6px;margin-bottom:16px;">
-      <button class="provider-btn active" id="prov-anthropic" onclick="selectProvider('anthropic')">
-        <span style="font-size:16px;">🟣</span><br>Anthropic<br><span style="font-size:9px;color:var(--muted);">Claude</span>
-      </button>
-      <button class="provider-btn" id="prov-openai" onclick="selectProvider('openai')">
-        <span style="font-size:16px;">⚫</span><br>OpenAI<br><span style="font-size:9px;color:var(--muted);">GPT-4o</span>
-      </button>
-      <button class="provider-btn" id="prov-groq" onclick="selectProvider('groq')">
-        <span style="font-size:16px;">🟠</span><br>Groq<br><span style="font-size:9px;color:var(--muted);">Llama 3</span>
-      </button>
-    </div>
-
-    <div id="providerInfo" style="font-size:10px;color:var(--accent3);font-family:JetBrains Mono,monospace;margin-bottom:10px;padding:6px 8px;background:rgba(0,212,255,0.06);border:1px solid rgba(0,212,255,0.15);"></div>
-
-    <label class="modal-label" id="keyLabel2">Sua API Key</label>
-    <input type="password" class="modal-input" id="apiKeyInput" placeholder="sk-ant-api03-..." autocomplete="off">
-    <div class="modal-hint" id="keyHint">
-      Obtenha em <a href="https://console.anthropic.com" target="_blank" id="keyLink">console.anthropic.com</a><br>
-      Salva só no seu navegador — nunca enviada a nenhum servidor.
-    </div>
-    <button class="modal-btn" onclick="saveApiKey()">▶ CONFIRMAR E COMEÇAR</button>
-    <div class="modal-error" id="modalError"></div>
-  </div>
-</div>
-
-<header>
-  <div class="logo">L9</div>
-  <div class="header-text">
-    <h1>ANIMAÇÃO MASTER AGENT</h1>
-    <p>Super Roteirista + Diretor Cinematográfico AI · v6.0</p>
-  </div>
-  <div class="header-right">
-    <div class="user-chip" id="userChip" style="display:none;">
-      <span class="udot"></span>
-      <span id="userEmail">—</span>
-      <button class="logout-btn" onclick="doLogout()">Sair</button>
-    </div>
-    <span class="badge" id="providerBadge" style="background:var(--surface);border:1px solid var(--border);color:var(--muted);cursor:pointer;" onclick="document.getElementById('apiModal').style.display='flex';selectProvider(currentProvider);" title="Trocar provedor">🔑 Anthropic</span>
-    <span class="badge bl99">L99</span>
-    <span class="badge bgod">GOD</span>
-    <span class="badge bv6">v6</span>
-  </div>
-</header>
-
-<div class="main">
-  <div class="sidebar">
-    <div class="sidebar-sec">Pipeline</div>
-    <div class="stage-list">
-      <div class="stage-item active" id="s1"><div class="snum">1</div><div><div class="slabel">Coleta</div><div class="ssub">Configuração</div></div></div>
-      <div class="stage-item disabled" id="s2"><div class="snum">2</div><div><div class="slabel">Personagens</div><div class="ssub">Estilo + Trava</div></div></div>
-      <div class="stage-item disabled" id="s3"><div class="snum">3</div><div><div class="slabel">5 Ideias</div><div class="ssub">Escolha o roteiro</div></div></div>
-      <div class="stage-item disabled" id="s4"><div class="snum">4</div><div><div class="slabel">Roteiro</div><div class="ssub">Cronometrado</div></div></div>
-      <div class="stage-item disabled" id="s5"><div class="snum">5</div><div><div class="slabel">Mapa</div><div class="ssub">Storyboards</div></div></div>
-      <div class="stage-item disabled" id="s6"><div class="snum">6</div><div><div class="slabel">Storyboards</div><div class="ssub">Um por um</div></div></div>
-      <div class="stage-item disabled" id="s7"><div class="snum">7</div><div><div class="slabel">Prompts</div><div class="ssub">VEO 3.1 / Omni / Seedance</div></div></div>
-    </div>
-    <div class="rules-box">
-      <div class="rules-title">⚡ Regras Ativas</div>
-      <div class="rule-item"><span class="ri">✗</span><span>Zero legenda / texto cena</span></div>
-      <div class="rule-item"><span class="ri">✗</span><span>Zero personagem duplo</span></div>
-      <div class="rule-item"><span class="rg ri">✓</span><span>Falas PT-BR</span></div>
-      <div class="rule-item"><span class="rg ri">✓</span><span>Sem limite de chars</span></div>
-      <div class="rule-item"><span class="rg ri">✓</span><span>Cortes orgânicos</span></div>
-      <div class="rule-item"><span class="rg ri">✓</span><span>10 Camadas Storytelling</span></div>
-    </div>
-    <div class="sb-progress-box">
-      <div class="sb-progress-label">Progresso</div>
-      <div class="sb-progress-val"><span id="sbDone">0</span> / <span id="sbTotal">?</span> Storyboards</div>
-      <div class="sb-progress-bar"><div class="sb-progress-fill" id="sbProgressFill"></div></div>
-    </div>
-    <div class="sb-history">
-      <div class="sb-history-title">📋 Gerados</div>
-      <div id="sbHistoryList"><div class="sb-empty">Nenhum ainda.</div></div>
-    </div>
-  </div>
-
-  <div class="chat-container">
-    <div class="token-warning" id="tokenWarning">ℹ️ Conversa longa — histórico comprimido automaticamente.</div>
-    <div class="chat-messages" id="chatMessages"></div>
-    <div class="quick-actions">
-      <button class="qbtn hl2" onclick="reiniciar()">↺ Reiniciar</button>
-      <button class="qbtn hlg" onclick="qsend('Continuar para a próxima etapa.')">▶ Continuar</button>
-      <button class="qbtn" onclick="qsend('Quero as 5 ideias.')">💡 5 Ideias</button>
-      <button class="qbtn" onclick="qsend('Refazer o último storyboard com abordagem diferente.')">🔄 Refazer</button>
-      <button class="qbtn" id="btnIniciarGlobal" onclick="iniciarProjeto()" style="display:none;border-color:rgba(232,255,0,0.6);color:var(--accent);font-weight:900;">▶ Iniciar</button>
-    </div>
-    <div class="input-zone">
-      <div class="upload-strip" id="uploadStrip">
-        <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          Adicionar Imagem
-        </button>
-        <input type="file" id="fileInput" accept="image/*,.srt,.txt,.vtt" multiple onchange="handleFiles(event)">
-        <div class="preview-strip" id="previewStrip"><span class="no-img-hint">Nenhuma imagem anexada</span></div>
-      </div>
-      <div class="input-row">
-        <div class="input-wrapper">
-          <textarea id="userInput" placeholder="Descreva sua ideia ou use os botões acima..." rows="2" onkeydown="handleKey(event)" oninput="updateCount()"></textarea>
-          <div class="input-meta">
-            <span class="img-badge" id="imgBadge"></span>
-            <span class="char-badge" id="charBadge">0</span>
-          </div>
-        </div>
-        <button class="send-btn" id="sendBtn" onclick="sendMsg()">➤</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<style>
-:root{
-  --black:#070709;--deep:#0d0d12;--surface:#13131a;--card:#1a1a24;
-  --border:#2a2a38;--accent:#e8ff00;--accent2:#ff4d00;--accent3:#00d4ff;
-  --text:#e8e8f0;--muted:#7070a0;--success:#00ff99;--warn:#ffaa00;--purple:#b066ff;
-}
-*{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--black);color:var(--text);font-family:'Barlow Condensed',sans-serif;font-size:15px;height:100vh;display:flex;flex-direction:column;overflow:hidden;}
-
-/* ── PROVIDER BUTTONS ── */
-.provider-btn{flex:1;padding:10px 6px;background:var(--surface);border:1px solid var(--border);
-  color:var(--text);cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:12px;
-  font-weight:700;letter-spacing:1px;text-align:center;transition:all 0.15s;line-height:1.4;}
-.provider-btn:hover{border-color:var(--accent);color:var(--accent);}
-.provider-btn.active{border-color:var(--accent);background:rgba(232,255,0,0.08);color:var(--accent);}
-/* ── AUTH SCREEN ── */
-#authScreen{position:fixed;inset:0;background:var(--black);display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;}
-.auth-box{background:var(--deep);border:1px solid var(--border);border-top:3px solid var(--accent);padding:40px;width:380px;max-width:92vw;}
-.auth-logo{font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--accent);letter-spacing:3px;margin-bottom:4px;}
-.auth-sub{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:24px;}
-.auth-tabs{display:flex;gap:0;margin-bottom:20px;border-bottom:1px solid var(--border);}
-.auth-tab{flex:1;padding:8px;background:none;border:none;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;cursor:pointer;text-transform:uppercase;border-bottom:2px solid transparent;transition:all 0.15s;}
-.auth-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
-.auth-label{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:5px;display:block;}
-.auth-input{width:100%;background:var(--black);border:1px solid var(--border);color:var(--text);padding:11px 13px;font-family:'JetBrains Mono',monospace;font-size:13px;outline:none;margin-bottom:12px;transition:border-color 0.2s;}
-.auth-input:focus{border-color:var(--accent);}
-.auth-btn{width:100%;padding:12px;background:var(--accent);border:none;color:var(--black);font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;cursor:pointer;transition:background 0.15s;margin-top:4px;}
-.auth-btn:hover{background:#fff;}
-.auth-btn:disabled{background:var(--border);color:var(--muted);cursor:not-allowed;}
-.auth-msg{font-size:11px;font-family:'JetBrains Mono',monospace;margin-top:10px;padding:8px;display:none;line-height:1.5;}
-.auth-msg.error{color:var(--accent2);background:rgba(255,77,0,0.08);border:1px solid rgba(255,77,0,0.2);}
-.auth-msg.success{color:var(--success);background:rgba(0,255,153,0.08);border:1px solid rgba(0,255,153,0.2);}
-.auth-forgot{font-size:10px;color:var(--accent3);cursor:pointer;background:none;border:none;font-family:'JetBrains Mono',monospace;margin-top:6px;display:block;text-align:right;}
-.google-btn{display:flex;align-items:center;justify-content:center;background:#fff;color:#333;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:1px;border:2px solid #ddd;transition:all 0.15s;}
-.google-btn:hover{background:#f5f5f5;border-color:#bbb;}
-.auth-forgot:hover{text-decoration:underline;}
-
-/* ── API KEY MODAL ── */
-#apiModal{position:fixed;inset:0;background:rgba(7,7,9,0.95);display:none;align-items:center;justify-content:center;z-index:8888;}
-.modal-box{background:var(--deep);border:1px solid var(--border);border-top:3px solid var(--accent);padding:36px 40px;max-width:460px;width:90%;}
-.modal-logo{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent);letter-spacing:3px;margin-bottom:4px;}
-.modal-sub{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:20px;}
-.modal-label{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:5px;display:block;}
-.modal-input{width:100%;background:var(--black);border:1px solid var(--border);color:var(--text);padding:11px 13px;font-family:'JetBrains Mono',monospace;font-size:13px;outline:none;margin-bottom:8px;transition:border-color 0.2s;}
-.modal-input:focus{border-color:var(--accent);}
-.modal-hint{font-size:10px;color:var(--muted);margin-bottom:18px;line-height:1.5;}
-.modal-hint a{color:var(--accent3);text-decoration:none;}
-.modal-btn{width:100%;padding:12px;background:var(--accent);border:none;color:var(--black);font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;cursor:pointer;transition:background 0.15s;}
-.modal-btn:hover{background:#fff;}
-.modal-error{font-size:11px;color:var(--accent2);margin-top:8px;font-family:'JetBrains Mono',monospace;display:none;}
-
-/* ── HEADER ── */
-header{background:var(--deep);border-bottom:1px solid var(--border);padding:9px 18px;display:flex;align-items:center;gap:12px;flex-shrink:0;position:relative;overflow:hidden;}
-header::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent2),var(--accent),var(--purple),var(--accent3));background-size:400% 100%;animation:slide 4s linear infinite;}
-@keyframes slide{to{background-position:400% 0;}}
-.logo{width:38px;height:38px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:19px;color:var(--black);}
-.header-text h1{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:3px;color:var(--accent);}
-.header-text p{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;}
-.header-right{margin-left:auto;display:flex;align-items:center;gap:8px;}
-.badge{padding:2px 8px;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;}
-.bl99{background:var(--accent);color:var(--black);}
-.bgod{background:var(--accent2);color:#fff;}
-.bv6{background:var(--purple);color:#fff;}
-.user-chip{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--success);font-family:'JetBrains Mono',monospace;padding:3px 8px;border:1px solid rgba(0,255,153,0.25);}
-.udot{width:5px;height:5px;border-radius:50%;background:var(--success);animation:pulse 2s infinite;}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
-.logout-btn{padding:3px 8px;font-size:10px;font-family:'JetBrains Mono',monospace;background:transparent;border:1px solid rgba(255,77,0,0.35);color:var(--accent2);cursor:pointer;transition:all 0.15s;}
-.logout-btn:hover{background:rgba(255,77,0,0.1);}
-
-/* ── MAIN ── */
-.main{display:flex;flex:1;overflow:hidden;}
-.sidebar{width:195px;background:var(--deep);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;}
-.sidebar-sec{padding:10px 13px 6px;font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;border-bottom:1px solid var(--border);}
-.stage-list{padding:5px 0;}
-.stage-item{padding:6px 12px;display:flex;align-items:center;gap:8px;border-left:2px solid transparent;}
-.stage-item.active{background:rgba(232,255,0,0.06);border-left-color:var(--accent);}
-.stage-item.done .snum{background:var(--success);color:var(--black);}
-.stage-item.disabled{opacity:0.28;}
-.snum{width:17px;height:17px;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;font-family:'JetBrains Mono',monospace;font-weight:700;flex-shrink:0;}
-.slabel{font-size:12px;font-weight:500;}
-.ssub{font-size:10px;color:var(--muted);}
-.rules-box{border-top:1px solid var(--border);padding:8px 12px;}
-.rules-title{font-size:9px;color:var(--accent2);letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:5px;font-weight:700;}
-.rule-item{display:flex;align-items:flex-start;gap:5px;font-size:10px;color:var(--muted);margin-bottom:2px;}
-.ri{color:var(--accent2);flex-shrink:0;font-size:9px;}
-.rg{color:var(--success)!important;}
-.sb-progress-box{padding:8px 12px;border-top:1px solid var(--border);}
-.sb-progress-label{font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:3px;}
-.sb-progress-val{font-size:13px;font-family:'JetBrains Mono',monospace;color:var(--accent);font-weight:700;}
-.sb-progress-bar{height:3px;background:var(--border);margin-top:4px;overflow:hidden;}
-.sb-progress-fill{height:100%;background:var(--accent3);transition:width 0.4s;width:0%;}
-.sb-history{border-top:1px solid var(--border);padding:8px 12px;flex:1;overflow-y:auto;min-height:0;}
-.sb-history-title{font-size:9px;color:var(--accent3);letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:5px;font-weight:700;}
-.sb-entry{display:flex;align-items:center;gap:5px;padding:3px 5px;margin-bottom:2px;background:var(--surface);border:1px solid var(--border);cursor:pointer;font-size:11px;}
-.sb-entry:hover{border-color:var(--accent3);}
-.sb-num{font-size:9px;font-family:'JetBrains Mono',monospace;color:var(--accent);font-weight:700;flex-shrink:0;}
-.sb-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted);}
-.sb-copy{padding:1px 5px;font-size:9px;font-family:'JetBrains Mono',monospace;background:transparent;border:1px solid var(--border);color:var(--muted);cursor:pointer;flex-shrink:0;}
-.sb-copy:hover{border-color:var(--accent);color:var(--accent);}
-.sb-empty{font-size:10px;color:var(--muted);font-style:italic;}
-
-/* ── CHAT ── */
-.chat-container{flex:1;display:flex;flex-direction:column;overflow:hidden;}
-.chat-messages{flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth;}
-.chat-messages::-webkit-scrollbar{width:4px;}
-.chat-messages::-webkit-scrollbar-thumb{background:var(--border);}
-.msg{max-width:94%;animation:msgIn 0.2s ease;}
-@keyframes msgIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
-.msg.user{align-self:flex-end;}
-.msg.agent{align-self:flex-start;}
-.msg-header{font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:3px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;display:flex;align-items:center;gap:6px;}
-.dot{width:5px;height:5px;border-radius:50%;}
-.msg.agent .dot{background:var(--accent);}
-.msg.user .dot{background:var(--accent3);}
-.msg-body{padding:11px 14px;line-height:1.7;font-size:14px;position:relative;}
-.msg.agent .msg-body{background:var(--card);border:1px solid var(--border);border-radius:0 4px 4px 4px;}
-.msg.user .msg-body{background:rgba(232,255,0,0.07);border:1px solid rgba(232,255,0,0.18);border-radius:4px 0 4px 4px;text-align:right;}
-.msg-body pre{background:var(--black);border:1px solid var(--border);padding:10px 12px;margin:8px 0;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.6;color:#c8c8e8;white-space:pre-wrap;word-break:break-word;}
-.msg-body strong{color:var(--accent);}
-.msg-body em{color:var(--accent3);}
-.msg-body code{background:var(--black);font-family:'JetBrains Mono',monospace;font-size:12px;padding:1px 5px;color:var(--accent);}
-.cp-btn{padding:3px 8px;font-size:10px;font-family:'JetBrains Mono',monospace;background:var(--surface);border:1px solid var(--border);color:var(--muted);cursor:pointer;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;transition:all 0.15s;}
-.cp-btn:hover{border-color:var(--accent);color:var(--accent);}
-.cp-btn.copied{border-color:var(--success);color:var(--success);}
-
-/* ── THINKING ── */
-.thinking{display:flex;align-items:center;gap:8px;padding:9px 12px;background:var(--card);border:1px solid var(--border);width:fit-content;}
-.thinking-dots{display:flex;gap:4px;}
-.thinking-dots span{width:5px;height:5px;background:var(--accent);border-radius:50%;animation:bounce 1s infinite;}
-.thinking-dots span:nth-child(2){animation-delay:0.15s;}
-.thinking-dots span:nth-child(3){animation-delay:0.3s;}
-@keyframes bounce{0%,80%,100%{transform:translateY(0);opacity:0.4}40%{transform:translateY(-5px);opacity:1}}
-.thinking-label{font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;}
-
-/* ── QUICK ACTIONS ── */
-.quick-actions{padding:6px 14px;display:flex;gap:5px;flex-wrap:wrap;border-top:1px solid var(--border);background:var(--deep);}
-.qbtn{padding:5px 10px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:transparent;border:1px solid var(--border);color:var(--muted);cursor:pointer;font-family:'Barlow Condensed',sans-serif;transition:all 0.15s;white-space:nowrap;}
-.qbtn:hover{border-color:var(--accent);color:var(--accent);background:rgba(232,255,0,0.05);}
-.qbtn.hl2{border-color:rgba(255,77,0,0.5);color:var(--accent2);}
-.qbtn.hlg{border-color:rgba(0,255,153,0.35);color:var(--success);}
-.qbtn:disabled{opacity:0.3;cursor:default;}
-
-/* ── INPUT ── */
-.input-zone{background:var(--deep);border-top:1px solid var(--border);flex-shrink:0;}
-.upload-strip{padding:6px 14px 0;display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
-.upload-btn{display:flex;align-items:center;gap:5px;padding:4px 10px;background:transparent;border:1px dashed var(--border);color:var(--muted);cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;transition:all 0.15s;flex-shrink:0;}
-.upload-btn:hover{border-color:var(--accent3);color:var(--accent3);}
-#fileInput{display:none;}
-.preview-strip{display:flex;gap:5px;flex-wrap:wrap;align-items:center;padding:3px 0;}
-.preview-item{position:relative;width:40px;height:40px;}
-.preview-item img{width:100%;height:100%;object-fit:cover;border:1px solid var(--accent3);}
-.remove-img{position:absolute;top:-4px;right:-4px;width:14px;height:14px;background:var(--accent2);border:none;cursor:pointer;font-size:9px;color:#fff;font-weight:700;border-radius:50%;display:flex;align-items:center;justify-content:center;}
-.preview-label{font-size:10px;color:var(--accent3);font-family:'JetBrains Mono',monospace;}
-.no-img-hint{font-size:11px;color:var(--muted);font-style:italic;}
-.input-row{padding:8px 14px 11px;display:flex;gap:7px;align-items:flex-end;}
-.input-wrapper{flex:1;}
-textarea{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:10px 13px;font-family:'Barlow Condensed',sans-serif;font-size:15px;resize:none;outline:none;min-height:44px;max-height:140px;line-height:1.5;transition:border-color 0.2s;}
-textarea:focus{border-color:var(--accent);}
-textarea::placeholder{color:var(--muted);}
-.input-meta{display:flex;justify-content:space-between;align-items:center;margin-top:3px;}
-.char-badge{padding:2px 6px;font-size:10px;font-family:'JetBrains Mono',monospace;border:1px solid var(--border);color:var(--muted);}
-.img-badge{font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--accent3);}
-.send-btn{width:44px;height:44px;background:var(--accent);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--black);transition:all 0.15s;flex-shrink:0;}
-.send-btn:hover{background:#fff;}
-.send-btn:disabled{background:var(--border);color:var(--muted);cursor:default;}
-.token-warning{background:rgba(255,170,0,0.08);border:1px solid rgba(255,170,0,0.25);padding:7px 12px;font-size:11px;color:var(--warn);display:none;font-family:'JetBrains Mono',monospace;}
-.token-warning.visible{display:block;}
-
-/* ── WELCOME ── */
-.welcome{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--accent);padding:14px 17px;}
-.welcome-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:var(--accent);margin-bottom:3px;}
-.welcome-sub{font-size:12px;color:var(--muted);letter-spacing:1px;margin-bottom:10px;}
-.wgrid{display:grid;grid-template-columns:1fr 1fr;gap:4px;}
-.wf{display:flex;align-items:center;gap:5px;font-size:12px;}
-.wf::before{content:'▸';color:var(--accent);font-size:10px;}
-
-/* ── FORM ── */
-.form-group{margin-bottom:12px;}
-.form-label{display:block;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;font-family:'JetBrains Mono',monospace;}
-.form-btns{display:flex;flex-wrap:wrap;gap:5px;}
-
-/* ── TOAST ── */
-.toast{position:fixed;bottom:20px;right:20px;background:var(--success);color:var(--black);padding:8px 16px;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:1px;z-index:9999;animation:toastIn 0.2s ease;}
-@keyframes toastIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
-::-webkit-scrollbar{width:4px;}
-::-webkit-scrollbar-thumb{background:var(--border);}
-</style>
-</head>
-<body>
-
-<!-- AUTH SCREEN -->
-<div id="authScreen">
-  <div class="auth-box">
-    <div class="auth-logo">🎬 ANIMAÇÃO MASTER</div>
-    <div class="auth-sub">L99 GODMODE v6 · Acesso Exclusivo</div>
-    <div style="margin-bottom:20px;font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;line-height:1.6;padding:10px;border:1px solid var(--border);background:rgba(232,255,0,0.03);">
-      🔒 Acesso por convite.<br>Apenas e-mails autorizados podem entrar.
-    </div>
-    <button class="auth-btn google-btn" id="googleBtn" onclick="doGoogleLogin()">
-      <svg width="18" height="18" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:8px;"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-      Entrar com Google
-    </button>
-    <div class="auth-msg" id="authMsg"></div>
-  </div>
-</div>
-
-<!-- API KEY MODAL -->
-<div id="apiModal" style="display:none;position:fixed;inset:0;background:rgba(7,7,9,0.95);align-items:center;justify-content:center;z-index:8888;">
-  <div class="modal-box" style="max-width:500px;">
-    <div class="modal-logo">🔑 CONFIGURAR API</div>
-    <div class="modal-sub">Escolha o provedor e insira sua key</div>
-
-    <!-- Provider selector -->
-    <div style="display:flex;gap:6px;margin-bottom:16px;">
-      <button class="provider-btn active" id="prov-anthropic" onclick="selectProvider('anthropic')">
-        <span style="font-size:16px;">🟣</span><br>Anthropic<br><span style="font-size:9px;color:var(--muted);">Claude</span>
-      </button>
-      <button class="provider-btn" id="prov-openai" onclick="selectProvider('openai')">
-        <span style="font-size:16px;">⚫</span><br>OpenAI<br><span style="font-size:9px;color:var(--muted);">GPT-4o</span>
-      </button>
-      <button class="provider-btn" id="prov-groq" onclick="selectProvider('groq')">
-        <span style="font-size:16px;">🟠</span><br>Groq<br><span style="font-size:9px;color:var(--muted);">Llama 3</span>
-      </button>
-    </div>
-
-    <div id="providerInfo" style="font-size:10px;color:var(--accent3);font-family:JetBrains Mono,monospace;margin-bottom:10px;padding:6px 8px;background:rgba(0,212,255,0.06);border:1px solid rgba(0,212,255,0.15);"></div>
-
-    <label class="modal-label" id="keyLabel2">Sua API Key</label>
-    <input type="password" class="modal-input" id="apiKeyInput" placeholder="sk-ant-api03-..." autocomplete="off">
-    <div class="modal-hint" id="keyHint">
-      Obtenha em <a href="https://console.anthropic.com" target="_blank" id="keyLink">console.anthropic.com</a><br>
-      Salva só no seu navegador — nunca enviada a nenhum servidor.
-    </div>
-    <button class="modal-btn" onclick="saveApiKey()">▶ CONFIRMAR E COMEÇAR</button>
-    <div class="modal-error" id="modalError"></div>
-  </div>
-</div>
-
-<header>
-  <div class="logo">L9</div>
-  <div class="header-text">
-    <h1>ANIMAÇÃO MASTER AGENT</h1>
-    <p>Super Roteirista + Diretor Cinematográfico AI · v6.0</p>
-  </div>
-  <div class="header-right">
-    <div class="user-chip" id="userChip" style="display:none;">
-      <span class="udot"></span>
-      <span id="userEmail">—</span>
-      <button class="logout-btn" onclick="doLogout()">Sair</button>
-    </div>
-    <span class="badge" id="providerBadge" style="background:var(--surface);border:1px solid var(--border);color:var(--muted);cursor:pointer;" onclick="document.getElementById('apiModal').style.display='flex';selectProvider(currentProvider);" title="Trocar provedor">🔑 Anthropic</span>
-    <span class="badge bl99">L99</span>
-    <span class="badge bgod">GOD</span>
-    <span class="badge bv6">v6</span>
-  </div>
-</header>
-
-<div class="main">
-  <div class="sidebar">
-    <div class="sidebar-sec">Pipeline</div>
-    <div class="stage-list">
-      <div class="stage-item active" id="s1"><div class="snum">1</div><div><div class="slabel">Coleta</div><div class="ssub">Configuração</div></div></div>
-      <div class="stage-item disabled" id="s2"><div class="snum">2</div><div><div class="slabel">Personagens</div><div class="ssub">Estilo + Trava</div></div></div>
-      <div class="stage-item disabled" id="s3"><div class="snum">3</div><div><div class="slabel">5 Ideias</div><div class="ssub">Escolha o roteiro</div></div></div>
-      <div class="stage-item disabled" id="s4"><div class="snum">4</div><div><div class="slabel">Roteiro</div><div class="ssub">Cronometrado</div></div></div>
-      <div class="stage-item disabled" id="s5"><div class="snum">5</div><div><div class="slabel">Mapa</div><div class="ssub">Storyboards</div></div></div>
-      <div class="stage-item disabled" id="s6"><div class="snum">6</div><div><div class="slabel">Storyboards</div><div class="ssub">Um por um</div></div></div>
-      <div class="stage-item disabled" id="s7"><div class="snum">7</div><div><div class="slabel">Prompts</div><div class="ssub">VEO 3.1 / Omni / Seedance</div></div></div>
-    </div>
-    <div class="rules-box">
-      <div class="rules-title">⚡ Regras Ativas</div>
-      <div class="rule-item"><span class="ri">✗</span><span>Zero legenda / texto cena</span></div>
-      <div class="rule-item"><span class="ri">✗</span><span>Zero personagem duplo</span></div>
-      <div class="rule-item"><span class="rg ri">✓</span><span>Falas PT-BR</span></div>
-      <div class="rule-item"><span class="rg ri">✓</span><span>Sem limite de chars</span></div>
-      <div class="rule-item"><span class="rg ri">✓</span><span>Cortes orgânicos</span></div>
-      <div class="rule-item"><span class="rg ri">✓</span><span>10 Camadas Storytelling</span></div>
-    </div>
-    <div class="sb-progress-box">
-      <div class="sb-progress-label">Progresso</div>
-      <div class="sb-progress-val"><span id="sbDone">0</span> / <span id="sbTotal">?</span> Storyboards</div>
-      <div class="sb-progress-bar"><div class="sb-progress-fill" id="sbProgressFill"></div></div>
-    </div>
-    <div class="sb-history">
-      <div class="sb-history-title">📋 Gerados</div>
-      <div id="sbHistoryList"><div class="sb-empty">Nenhum ainda.</div></div>
-    </div>
-  </div>
-
-  <div class="chat-container">
-    <div class="token-warning" id="tokenWarning">ℹ️ Conversa longa — histórico comprimido automaticamente.</div>
-    <div class="chat-messages" id="chatMessages"></div>
-    <div class="quick-actions">
-      <button class="qbtn hl2" onclick="reiniciar()">↺ Reiniciar</button>
-      <button class="qbtn hlg" onclick="qsend('Continuar para a próxima etapa.')">▶ Continuar</button>
-      <button class="qbtn" onclick="qsend('Quero as 5 ideias.')">💡 5 Ideias</button>
-      <button class="qbtn" onclick="qsend('Refazer o último storyboard com abordagem diferente.')">🔄 Refazer</button>
-      <button class="qbtn" id="btnIniciarGlobal" onclick="iniciarProjeto()" style="display:none;border-color:rgba(232,255,0,0.6);color:var(--accent);font-weight:900;">▶ Iniciar</button>
-    </div>
-    <div class="input-zone">
-      <div class="upload-strip" id="uploadStrip">
-        <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          Adicionar Imagem
-        </button>
-        <input type="file" id="fileInput" accept="image/*,.srt,.txt,.vtt" multiple onchange="handleFiles(event)">
-        <div class="preview-strip" id="previewStrip"><span class="no-img-hint">Nenhuma imagem anexada</span></div>
-      </div>
-      <div class="input-row">
-        <div class="input-wrapper">
-          <textarea id="userInput" placeholder="Descreva sua ideia ou use os botões acima..." rows="2" onkeydown="handleKey(event)" oninput="updateCount()"></textarea>
-          <div class="input-meta">
-            <span class="img-badge" id="imgBadge"></span>
-            <span class="char-badge" id="charBadge">0</span>
-          </div>
-        </div>
-        <button class="send-btn" id="sendBtn" onclick="sendMsg()">➤</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<style>
-:root{
-  --black:#070709;--deep:#0d0d12;--surface:#13131a;--card:#1a1a24;
-  --border:#2a2a38;--accent:#e8ff00;--accent2:#ff4d00;--accent3:#00d4ff;
-  --text:#e8e8f0;--muted:#7070a0;--success:#00ff99;--warn:#ffaa00;--purple:#b066ff;
-}
-*{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--black);color:var(--text);font-family:'Barlow Condensed',sans-serif;font-size:15px;height:100vh;display:flex;flex-direction:column;overflow:hidden;}
-
-/* ── PROVIDER BUTTONS ── */
-.provider-btn{flex:1;padding:10px 6px;background:var(--surface);border:1px solid var(--border);
-  color:var(--text);cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:12px;
-  font-weight:700;letter-spacing:1px;text-align:center;transition:all 0.15s;line-height:1.4;}
-.provider-btn:hover{border-color:var(--accent);color:var(--accent);}
-.provider-btn.active{border-color:var(--accent);background:rgba(232,255,0,0.08);color:var(--accent);}
-/* ── AUTH SCREEN ── */
-#authScreen{position:fixed;inset:0;background:var(--black);display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;}
-.auth-box{background:var(--deep);border:1px solid var(--border);border-top:3px solid var(--accent);padding:40px;width:380px;max-width:92vw;}
-.auth-logo{font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--accent);letter-spacing:3px;margin-bottom:4px;}
-.auth-sub{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:24px;}
-.auth-tabs{display:flex;gap:0;margin-bottom:20px;border-bottom:1px solid var(--border);}
-.auth-tab{flex:1;padding:8px;background:none;border:none;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;cursor:pointer;text-transform:uppercase;border-bottom:2px solid transparent;transition:all 0.15s;}
-.auth-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
-.auth-label{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:5px;display:block;}
-.auth-input{width:100%;background:var(--black);border:1px solid var(--border);color:var(--text);padding:11px 13px;font-family:'JetBrains Mono',monospace;font-size:13px;outline:none;margin-bottom:12px;transition:border-color 0.2s;}
-.auth-input:focus{border-color:var(--accent);}
-.auth-btn{width:100%;padding:12px;background:var(--accent);border:none;color:var(--black);font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;cursor:pointer;transition:background 0.15s;margin-top:4px;}
-.auth-btn:hover{background:#fff;}
-.auth-btn:disabled{background:var(--border);color:var(--muted);cursor:not-allowed;}
-.auth-msg{font-size:11px;font-family:'JetBrains Mono',monospace;margin-top:10px;padding:8px;display:none;line-height:1.5;}
-.auth-msg.error{color:var(--accent2);background:rgba(255,77,0,0.08);border:1px solid rgba(255,77,0,0.2);}
-.auth-msg.success{color:var(--success);background:rgba(0,255,153,0.08);border:1px solid rgba(0,255,153,0.2);}
-.auth-forgot{font-size:10px;color:var(--accent3);cursor:pointer;background:none;border:none;font-family:'JetBrains Mono',monospace;margin-top:6px;display:block;text-align:right;}
-.google-btn{display:flex;align-items:center;justify-content:center;background:#fff;color:#333;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:1px;border:2px solid #ddd;transition:all 0.15s;}
-.google-btn:hover{background:#f5f5f5;border-color:#bbb;}
-.auth-forgot:hover{text-decoration:underline;}
-
-/* ── API KEY MODAL ── */
-#apiModal{position:fixed;inset:0;background:rgba(7,7,9,0.95);display:none;align-items:center;justify-content:center;z-index:8888;}
-.modal-box{background:var(--deep);border:1px solid var(--border);border-top:3px solid var(--accent);padding:36px 40px;max-width:460px;width:90%;}
-.modal-logo{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent);letter-spacing:3px;margin-bottom:4px;}
-.modal-sub{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:20px;}
-.modal-label{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:5px;display:block;}
-.modal-input{width:100%;background:var(--black);border:1px solid var(--border);color:var(--text);padding:11px 13px;font-family:'JetBrains Mono',monospace;font-size:13px;outline:none;margin-bottom:8px;transition:border-color 0.2s;}
-.modal-input:focus{border-color:var(--accent);}
-.modal-hint{font-size:10px;color:var(--muted);margin-bottom:18px;line-height:1.5;}
-.modal-hint a{color:var(--accent3);text-decoration:none;}
-.modal-btn{width:100%;padding:12px;background:var(--accent);border:none;color:var(--black);font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;cursor:pointer;transition:background 0.15s;}
-.modal-btn:hover{background:#fff;}
-.modal-error{font-size:11px;color:var(--accent2);margin-top:8px;font-family:'JetBrains Mono',monospace;display:none;}
-
-/* ── HEADER ── */
-header{background:var(--deep);border-bottom:1px solid var(--border);padding:9px 18px;display:flex;align-items:center;gap:12px;flex-shrink:0;position:relative;overflow:hidden;}
-header::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent2),var(--accent),var(--purple),var(--accent3));background-size:400% 100%;animation:slide 4s linear infinite;}
-@keyframes slide{to{background-position:400% 0;}}
-.logo{width:38px;height:38px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:19px;color:var(--black);}
-.header-text h1{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:3px;color:var(--accent);}
-.header-text p{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;}
-.header-right{margin-left:auto;display:flex;align-items:center;gap:8px;}
-.badge{padding:2px 8px;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;}
-.bl99{background:var(--accent);color:var(--black);}
-.bgod{background:var(--accent2);color:#fff;}
-.bv6{background:var(--purple);color:#fff;}
-.user-chip{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--success);font-family:'JetBrains Mono',monospace;padding:3px 8px;border:1px solid rgba(0,255,153,0.25);}
-.udot{width:5px;height:5px;border-radius:50%;background:var(--success);animation:pulse 2s infinite;}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
-.logout-btn{padding:3px 8px;font-size:10px;font-family:'JetBrains Mono',monospace;background:transparent;border:1px solid rgba(255,77,0,0.35);color:var(--accent2);cursor:pointer;transition:all 0.15s;}
-.logout-btn:hover{background:rgba(255,77,0,0.1);}
-
-/* ── MAIN ── */
-.main{display:flex;flex:1;overflow:hidden;}
-.sidebar{width:195px;background:var(--deep);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;}
-.sidebar-sec{padding:10px 13px 6px;font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;border-bottom:1px solid var(--border);}
-.stage-list{padding:5px 0;}
-.stage-item{padding:6px 12px;display:flex;align-items:center;gap:8px;border-left:2px solid transparent;}
-.stage-item.active{background:rgba(232,255,0,0.06);border-left-color:var(--accent);}
-.stage-item.done .snum{background:var(--success);color:var(--black);}
-.stage-item.disabled{opacity:0.28;}
-.snum{width:17px;height:17px;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;font-family:'JetBrains Mono',monospace;font-weight:700;flex-shrink:0;}
-.slabel{font-size:12px;font-weight:500;}
-.ssub{font-size:10px;color:var(--muted);}
-.rules-box{border-top:1px solid var(--border);padding:8px 12px;}
-.rules-title{font-size:9px;color:var(--accent2);letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:5px;font-weight:700;}
-.rule-item{display:flex;align-items:flex-start;gap:5px;font-size:10px;color:var(--muted);margin-bottom:2px;}
-.ri{color:var(--accent2);flex-shrink:0;font-size:9px;}
-.rg{color:var(--success)!important;}
-.sb-progress-box{padding:8px 12px;border-top:1px solid var(--border);}
-.sb-progress-label{font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:3px;}
-.sb-progress-val{font-size:13px;font-family:'JetBrains Mono',monospace;color:var(--accent);font-weight:700;}
-.sb-progress-bar{height:3px;background:var(--border);margin-top:4px;overflow:hidden;}
-.sb-progress-fill{height:100%;background:var(--accent3);transition:width 0.4s;width:0%;}
-.sb-history{border-top:1px solid var(--border);padding:8px 12px;flex:1;overflow-y:auto;min-height:0;}
-.sb-history-title{font-size:9px;color:var(--accent3);letter-spacing:2px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:5px;font-weight:700;}
-.sb-entry{display:flex;align-items:center;gap:5px;padding:3px 5px;margin-bottom:2px;background:var(--surface);border:1px solid var(--border);cursor:pointer;font-size:11px;}
-.sb-entry:hover{border-color:var(--accent3);}
-.sb-num{font-size:9px;font-family:'JetBrains Mono',monospace;color:var(--accent);font-weight:700;flex-shrink:0;}
-.sb-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted);}
-.sb-copy{padding:1px 5px;font-size:9px;font-family:'JetBrains Mono',monospace;background:transparent;border:1px solid var(--border);color:var(--muted);cursor:pointer;flex-shrink:0;}
-.sb-copy:hover{border-color:var(--accent);color:var(--accent);}
-.sb-empty{font-size:10px;color:var(--muted);font-style:italic;}
-
-/* ── CHAT ── */
-.chat-container{flex:1;display:flex;flex-direction:column;overflow:hidden;}
-.chat-messages{flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth;}
-.chat-messages::-webkit-scrollbar{width:4px;}
-.chat-messages::-webkit-scrollbar-thumb{background:var(--border);}
-.msg{max-width:94%;animation:msgIn 0.2s ease;}
-@keyframes msgIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
-.msg.user{align-self:flex-end;}
-.msg.agent{align-self:flex-start;}
-.msg-header{font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:3px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;display:flex;align-items:center;gap:6px;}
-.dot{width:5px;height:5px;border-radius:50%;}
-.msg.agent .dot{background:var(--accent);}
-.msg.user .dot{background:var(--accent3);}
-.msg-body{padding:11px 14px;line-height:1.7;font-size:14px;position:relative;}
-.msg.agent .msg-body{background:var(--card);border:1px solid var(--border);border-radius:0 4px 4px 4px;}
-.msg.user .msg-body{background:rgba(232,255,0,0.07);border:1px solid rgba(232,255,0,0.18);border-radius:4px 0 4px 4px;text-align:right;}
-.msg-body pre{background:var(--black);border:1px solid var(--border);padding:10px 12px;margin:8px 0;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.6;color:#c8c8e8;white-space:pre-wrap;word-break:break-word;}
-.msg-body strong{color:var(--accent);}
-.msg-body em{color:var(--accent3);}
-.msg-body code{background:var(--black);font-family:'JetBrains Mono',monospace;font-size:12px;padding:1px 5px;color:var(--accent);}
-.cp-btn{padding:3px 8px;font-size:10px;font-family:'JetBrains Mono',monospace;background:var(--surface);border:1px solid var(--border);color:var(--muted);cursor:pointer;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;transition:all 0.15s;}
-.cp-btn:hover{border-color:var(--accent);color:var(--accent);}
-.cp-btn.copied{border-color:var(--success);color:var(--success);}
-
-/* ── THINKING ── */
-.thinking{display:flex;align-items:center;gap:8px;padding:9px 12px;background:var(--card);border:1px solid var(--border);width:fit-content;}
-.thinking-dots{display:flex;gap:4px;}
-.thinking-dots span{width:5px;height:5px;background:var(--accent);border-radius:50%;animation:bounce 1s infinite;}
-.thinking-dots span:nth-child(2){animation-delay:0.15s;}
-.thinking-dots span:nth-child(3){animation-delay:0.3s;}
-@keyframes bounce{0%,80%,100%{transform:translateY(0);opacity:0.4}40%{transform:translateY(-5px);opacity:1}}
-.thinking-label{font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;}
-
-/* ── QUICK ACTIONS ── */
-.quick-actions{padding:6px 14px;display:flex;gap:5px;flex-wrap:wrap;border-top:1px solid var(--border);background:var(--deep);}
-.qbtn{padding:5px 10px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:transparent;border:1px solid var(--border);color:var(--muted);cursor:pointer;font-family:'Barlow Condensed',sans-serif;transition:all 0.15s;white-space:nowrap;}
-.qbtn:hover{border-color:var(--accent);color:var(--accent);background:rgba(232,255,0,0.05);}
-.qbtn.hl2{border-color:rgba(255,77,0,0.5);color:var(--accent2);}
-.qbtn.hlg{border-color:rgba(0,255,153,0.35);color:var(--success);}
-.qbtn:disabled{opacity:0.3;cursor:default;}
-
-/* ── INPUT ── */
-.input-zone{background:var(--deep);border-top:1px solid var(--border);flex-shrink:0;}
-.upload-strip{padding:6px 14px 0;display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
-.upload-btn{display:flex;align-items:center;gap:5px;padding:4px 10px;background:transparent;border:1px dashed var(--border);color:var(--muted);cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;transition:all 0.15s;flex-shrink:0;}
-.upload-btn:hover{border-color:var(--accent3);color:var(--accent3);}
-#fileInput{display:none;}
-.preview-strip{display:flex;gap:5px;flex-wrap:wrap;align-items:center;padding:3px 0;}
-.preview-item{position:relative;width:40px;height:40px;}
-.preview-item img{width:100%;height:100%;object-fit:cover;border:1px solid var(--accent3);}
-.remove-img{position:absolute;top:-4px;right:-4px;width:14px;height:14px;background:var(--accent2);border:none;cursor:pointer;font-size:9px;color:#fff;font-weight:700;border-radius:50%;display:flex;align-items:center;justify-content:center;}
-.preview-label{font-size:10px;color:var(--accent3);font-family:'JetBrains Mono',monospace;}
-.no-img-hint{font-size:11px;color:var(--muted);font-style:italic;}
-.input-row{padding:8px 14px 11px;display:flex;gap:7px;align-items:flex-end;}
-.input-wrapper{flex:1;}
-textarea{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:10px 13px;font-family:'Barlow Condensed',sans-serif;font-size:15px;resize:none;outline:none;min-height:44px;max-height:140px;line-height:1.5;transition:border-color 0.2s;}
-textarea:focus{border-color:var(--accent);}
-textarea::placeholder{color:var(--muted);}
-.input-meta{display:flex;justify-content:space-between;align-items:center;margin-top:3px;}
-.char-badge{padding:2px 6px;font-size:10px;font-family:'JetBrains Mono',monospace;border:1px solid var(--border);color:var(--muted);}
-.img-badge{font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--accent3);}
-.send-btn{width:44px;height:44px;background:var(--accent);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--black);transition:all 0.15s;flex-shrink:0;}
-.send-btn:hover{background:#fff;}
-.send-btn:disabled{background:var(--border);color:var(--muted);cursor:default;}
-.token-warning{background:rgba(255,170,0,0.08);border:1px solid rgba(255,170,0,0.25);padding:7px 12px;font-size:11px;color:var(--warn);display:none;font-family:'JetBrains Mono',monospace;}
-.token-warning.visible{display:block;}
-
-/* ── WELCOME ── */
-.welcome{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--accent);padding:14px 17px;}
-.welcome-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:var(--accent);margin-bottom:3px;}
-.welcome-sub{font-size:12px;color:var(--muted);letter-spacing:1px;margin-bottom:10px;}
-.wgrid{display:grid;grid-template-columns:1fr 1fr;gap:4px;}
-.wf{display:flex;align-items:center;gap:5px;font-size:12px;}
-.wf::before{content:'▸';color:var(--accent);font-size:10px;}
-
-/* ── FORM ── */
-.form-group{margin-bottom:12px;}
-.form-label{display:block;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;font-family:'JetBrains Mono',monospace;}
-.form-btns{display:flex;flex-wrap:wrap;gap:5px;}
-
-/* ── TOAST ── */
-.toast{position:fixed;bottom:20px;right:20px;background:var(--success);color:var(--black);padding:8px 16px;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:1px;z-index:9999;animation:toastIn 0.2s ease;}
-@keyframes toastIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
-::-webkit-scrollbar{width:4px;}
-::-webkit-scrollbar-thumb{background:var(--border);}
-</style>
-</head>
-<body>
-
-<!-- AUTH SCREEN -->
-<div id="authScreen">
-  <div class="auth-box">
-    <div class="auth-logo">🎬 ANIMAÇÃO MASTER</div>
-    <div class="auth-sub">L99 GODMODE v6 · Acesso Exclusivo</div>
-    <div style="margin-bottom:20px;font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;line-height:1.6;padding:10px;border:1px solid var(--border);background:rgba(232,255,0,0.03);">
-      🔒 Acesso por convite.<br>Apenas e-mails autorizados podem entrar.
-    </div>
-    <button class="auth-btn google-btn" id="googleBtn" onclick="doGoogleLogin()">
-      <svg width="18" height="18" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:8px;"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-      Entrar com Google
-    </button>
-    <div class="auth-msg" id="authMsg"></div>
-  </div>
-</div>
-
-<!-- API KEY MODAL -->
-<div id="apiModal" style="display:none;position:fixed;inset:0;background:rgba(7,7,9,0.95);align-items:center;justify-content:center;z-index:8888;">
-  <div class="modal-box" style="max-width:500px;">
-    <div class="modal-logo">🔑 CONFIGURAR API</div>
-    <div class="modal-sub">Escolha o provedor e insira sua key</div>
-
-    <!-- Provider selector -->
-    <div style="display:flex;gap:6px;margin-bottom:16px;">
-      <button class="provider-btn active" id="prov-anthropic" onclick="selectProvider('anthropic')">
-        <span style="font-size:16px;">🟣</span><br>Anthropic<br><span style="font-size:9px;color:var(--muted);">Claude</span>
-      </button>
-      <button class="provider-btn" id="prov-openai" onclick="selectProvider('openai')">
-        <span style="font-size:16px;">⚫</span><br>OpenAI<br><span style="font-size:9px;color:var(--muted);">GPT-4o</span>
-      </button>
-      <button class="provider-btn" id="prov-groq" onclick="selectProvider('groq')">
-        <span style="font-size:16px;">🟠</span><br>Groq<br><span style="font-size:9px;color:var(--muted);">Llama 3</span>
-      </button>
-    </div>
-
-    <div id="providerInfo" style="font-size:10px;color:var(--accent3);font-family:JetBrains Mono,monospace;margin-bottom:10px;padding:6px 8px;background:rgba(0,212,255,0.06);border:1px solid rgba(0,212,255,0.15);"></div>
-
-    <label class="modal-label" id="keyLabel2">Sua API Key</label>
-    <input type="password" class="modal-input" id="apiKeyInput" placeholder="sk-ant-api03-..." autocomplete="off">
-    <div class="modal-hint" id="keyHint">
-      Obtenha em <a href="https://console.anthropic.com" target="_blank" id="keyLink">console.anthropic.com</a><br>
-      Salva só no seu navegador — nunca enviada a nenhum servidor.
-    </div>
-    <button class="modal-btn" onclick="saveApiKey()">▶ CONFIRMAR E COMEÇAR</button>
-    <div class="modal-error" id="modalError"></div>
-  </div>
-</div>
-
-<header>
-  <div class="logo">L9</div>
-  <div class="header-text">
-    <h1>ANIMAÇÃO MASTER AGENT</h1>
-    <p>Super Roteirista + Diretor Cinematográfico AI · v6.0</p>
-  </div>
-  <div class="header-right">
-    <div class="user-chip" id="userChip" style="display:none;">
-      <span class="udot"></span>
-      <span id="userEmail">—</span>
-      <button class="logout-btn" onclick="doLogout()">Sair</button>
-    </div>
-    <span class="badge" id="providerBadge" style="background:var(--surface);border:1px solid var(--border);color:var(--muted);cursor:pointer;" onclick="document.getElementById('apiModal').style.display='flex';selectProvider(currentProvider);" title="Trocar provedor">🔑 Anthropic</span>
-    <span class="badge bl99">L99</span>
-    <span class="badge bgod">GOD</span>
-    <span class="badge bv6">v6</span>
-  </div>
-</header>
-
-<div class="main">
-  <div class="sidebar">
-    <div class="sidebar-sec">Pipeline</div>
-    <div class="stage-list">
-      <div class="stage-item active" id="s1"><div class="snum">1</div><div><div class="slabel">Coleta</div><div class="ssub">Configuração</div></div></div>
-      <div class="stage-item disabled" id="s2"><div class="snum">2</div><div><div class="slabel">Personagens</div><div class="ssub">Estilo + Trava</div></div></div>
-      <div class="stage-item disabled" id="s3"><div class="snum">3</div><div><div class="slabel">5 Ideias</div><div class="ssub">Escolha o roteiro</div></div></div>
-      <div class="stage-item disabled" id="s4"><div class="snum">4</div><div><div class="slabel">Roteiro</div><div class="ssub">Cronometrado</div></div></div>
-      <div class="stage-item disabled" id="s5"><div class="snum">5</div><div><div class="slabel">Mapa</div><div class="ssub">Storyboards</div></div></div>
-      <div class="stage-item disabled" id="s6"><div class="snum">6</div><div><div class="slabel">Storyboards</div><div class="ssub">Um por um</div></div></div>
-      <div class="stage-item disabled" id="s7"><div class="snum">7</div><div><div class="slabel">Prompts</div><div class="ssub">VEO 3.1 / Omni / Seedance</div></div></div>
-    </div>
-    <div class="rules-box">
-      <div class="rules-title">⚡ Regras Ativas</div>
-      <div class="rule-item"><span class="ri">✗</span><span>Zero legenda / texto cena</span></div>
-      <div class="rule-item"><span class="ri">✗</span><span>Zero personagem duplo</span></div>
-      <div class="rule-item"><span class="rg ri">✓</span><span>Falas PT-BR</span></div>
-      <div class="rule-item"><span class="rg ri">✓</span><span>Sem limite de chars</span></div>
-      <div class="rule-item"><span class="rg ri">✓</span><span>Cortes orgânicos</span></div>
-      <div class="rule-item"><span class="rg ri">✓</span><span>10 Camadas Storytelling</span></div>
-    </div>
-    <div class="sb-progress-box">
-      <div class="sb-progress-label">Progresso</div>
-      <div class="sb-progress-val"><span id="sbDone">0</span> / <span id="sbTotal">?</span> Storyboards</div>
-      <div class="sb-progress-bar"><div class="sb-progress-fill" id="sbProgressFill"></div></div>
-    </div>
-    <div class="sb-history">
-      <div class="sb-history-title">📋 Gerados</div>
-      <div id="sbHistoryList"><div class="sb-empty">Nenhum ainda.</div></div>
-    </div>
-  </div>
-
-  <div class="chat-container">
-    <div class="token-warning" id="tokenWarning">ℹ️ Conversa longa — histórico comprimido automaticamente.</div>
-    <div class="chat-messages" id="chatMessages"></div>
-    <div class="quick-actions">
-      <button class="qbtn hl2" onclick="reiniciar()">↺ Reiniciar</button>
-      <button class="qbtn hlg" onclick="qsend('Continuar para a próxima etapa.')">▶ Continuar</button>
-      <button class="qbtn" onclick="qsend('Quero as 5 ideias.')">💡 5 Ideias</button>
-      <button class="qbtn" onclick="qsend('Refazer o último storyboard com abordagem diferente.')">🔄 Refazer</button>
-      <button class="qbtn" id="btnIniciarGlobal" onclick="iniciarProjeto()" style="display:none;border-color:rgba(232,255,0,0.6);color:var(--accent);font-weight:900;">▶ Iniciar</button>
-    </div>
-    <div class="input-zone">
-      <div class="upload-strip" id="uploadStrip">
-        <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          Adicionar Imagem
-        </button>
-        <input type="file" id="fileInput" accept="image/*,.srt,.txt,.vtt" multiple onchange="handleFiles(event)">
-        <div class="preview-strip" id="previewStrip"><span class="no-img-hint">Nenhuma imagem anexada</span></div>
-      </div>
-      <div class="input-row">
-        <div class="input-wrapper">
-          <textarea id="userInput" placeholder="Descreva sua ideia ou use os botões acima..." rows="2" onkeydown="handleKey(event)" oninput="updateCount()"></textarea>
-          <div class="input-meta">
-            <span class="img-badge" id="imgBadge"></span>
-            <span class="char-badge" id="charBadge">0</span>
-          </div>
+        <div class="input-wrap">
+          <textarea id="userIn" placeholder="Descreva sua ideia ou use os botões acima..." rows="2" onkeydown="handleKey(event)" oninput="updateCnt()"></textarea>
+          <div class="input-meta"><span class="ibadge" id="iBadge"></span><span class="cbadge" id="cBadge">0</span></div>
         </div>
         <button class="send-btn" id="sendBtn" onclick="sendMsg()">➤</button>
       </div>
@@ -1305,256 +272,129 @@ textarea::placeholder{color:var(--muted);}
 </div>
 
 <script>
-// ════════════════════════════════════════════════════════════════
-//  SUPABASE AUTH
-// ════════════════════════════════════════════════════════════════
-const SUPABASE_URL = 'https://namszswwvzgkcmqzfoiq.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_8OgKTNc1EvTVo0DK61UJVg_uNiigcKB';
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+// ══ SUPABASE ══
+const SB_URL = 'https://namszswwvzgkcmqzfoiq.supabase.co';
+const SB_KEY = 'sb_publishable_8OgKTNc1EvTVo0DK61UJVg_uNiigcKB';
+const sb = supabase.createClient(SB_URL, SB_KEY);
 
-let apiKey = localStorage.getItem('animacao_apikey') || '';
-let currentProvider = localStorage.getItem('animacao_provider') || 'anthropic';
-let currentModel = localStorage.getItem('animacao_model') || 'claude-sonnet-4-6';
-let history = [];
-let isProcessing = false;
-let pendingImages = [];
-let etapa1Pending = true;
-let sbHistory = [];
-let sbTotalExpected = 0;
+// ══ STATE ══
+let apiKey = localStorage.getItem('ak') || '';
+let curProv = localStorage.getItem('prov') || 'anthropic';
+let curModel = localStorage.getItem('model') || 'claude-sonnet-4-6';
+let history = [], isProcessing = false, pendingImgs = [];
+let etapa1Pending = true, sbHistory = [], sbTotal = 0;
 
-// Check session on load
+const PROVS = {
+  anthropic: { info:'Modelo: claude-sonnet-4-6 · Melhor qualidade', placeholder:'sk-ant-api03-...', link:'https://console.anthropic.com', model:'claude-sonnet-4-6', chip:'🟣 Claude' },
+  openai:    { info:'Modelo: gpt-4o · Ótimo para criatividade',      placeholder:'sk-proj-...',    link:'https://platform.openai.com/api-keys', model:'gpt-4o', chip:'⚫ GPT-4o' },
+  groq:      { info:'Modelo: llama-3.3-70b · Rápido e com plano grátis', placeholder:'gsk_...',   link:'https://console.groq.com', model:'llama-3.3-70b-versatile', chip:'🟠 Groq' }
+};
+
+// ══ AUTH ══
 window.addEventListener('load', async () => {
   const { data: { session } } = await sb.auth.getSession();
-  if (session) {
-    onLoggedIn(session.user);
-  }
-  document.getElementById('apiKeyInput').addEventListener('keydown', e => {
-    if (e.key === 'Enter') saveApiKey();
+  if (session) onLoggedIn(session.user);
+  sb.auth.onAuthStateChange((ev, sess) => {
+    if (ev === 'SIGNED_IN' && sess) onLoggedIn(sess.user);
+    if (ev === 'SIGNED_OUT') { document.getElementById('loginScreen').style.display='flex'; document.getElementById('userChip').style.display='none'; }
   });
+  document.getElementById('apiKeyIn').addEventListener('keydown', e => { if(e.key==='Enter') saveKey(); });
 });
 
-// Auth state changes
-sb.auth.onAuthStateChange((event, session) => {
-  if (event === 'SIGNED_IN' && session) onLoggedIn(session.user);
-  if (event === 'SIGNED_OUT') {
-    document.getElementById('authScreen').style.display = 'flex';
-    document.getElementById('userChip').style.display = 'none';
-  }
-});
-
-function showAuthMsg(txt, type) {
-  const el = document.getElementById('authMsg');
-  el.textContent = txt;
-  el.className = 'auth-msg ' + type;
-  el.style.display = txt ? 'block' : 'none';
+async function loginGoogle() {
+  const btn = document.getElementById('googleBtn');
+  btn.disabled = true; btn.textContent = 'Redirecionando...';
+  const { error } = await sb.auth.signInWithOAuth({ provider:'google', options:{ redirectTo: window.location.origin }});
+  if (error) { showLoginMsg('Erro: ' + error.message, 'error'); btn.disabled=false; btn.innerHTML='<svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg> Entrar com Google'; }
 }
 
-async function doGoogleLogin() {
-  const btn = document.getElementById('googleBtn');
-  btn.disabled = true;
-  btn.innerHTML = '<span style="margin-right:8px;">⏳</span> Redirecionando...';
-  const { error } = await sb.auth.signInWithOAuth({
-    provider: 'google',
-    options: {
-      redirectTo: window.location.origin
-    }
-  });
-  if (error) {
-    showAuthMsg('Erro ao conectar com Google: ' + error.message, 'error');
-    btn.disabled = false;
-    btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:8px;"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>Entrar com Google';
-  }
+function onLoggedIn(user) {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('userChip').style.display = 'flex';
+  document.getElementById('userEmail').textContent = user.email.split('@')[0];
+  if (apiKey && apiKey.length > 10) { document.getElementById('apiModal').style.display='none'; initApp(); }
+  else { document.getElementById('apiModal').style.display='flex'; setProv(curProv); }
 }
 
 async function doLogout() {
   await sb.auth.signOut();
-  localStorage.removeItem('animacao_apikey');
-  apiKey = '';
-  history = []; pendingImages = [];
-  document.getElementById('chatMessages').innerHTML = '';
-  document.getElementById('authScreen').style.display = 'flex';
+  localStorage.removeItem('ak'); apiKey='';
+  history=[]; pendingImgs=[];
+  document.getElementById('chatMsgs').innerHTML='';
+}
+
+function showLoginMsg(txt, type) {
+  const el=document.getElementById('loginMsg'); el.textContent=txt; el.className='login-msg '+type; el.style.display=txt?'block':'none';
+}
+
+// ══ PROVIDER ══
+function setProv(p) {
+  curProv = p; const cfg = PROVS[p];
+  Object.keys(PROVS).forEach(k => document.getElementById('pt-'+k).classList.toggle('active', k===p));
+  document.getElementById('provInfo').textContent = cfg.info;
+  document.getElementById('apiKeyIn').placeholder = cfg.placeholder;
+  document.getElementById('apiLink').href = cfg.link;
+  document.getElementById('apiLink').textContent = cfg.link.replace('https://','');
+  const saved = localStorage.getItem('ak_'+p);
+  document.getElementById('apiKeyIn').value = saved || '';
+  document.getElementById('apiErr').style.display = 'none';
+}
+
+function saveKey() {
+  const val = document.getElementById('apiKeyIn').value.trim();
+  const err = document.getElementById('apiErr');
+  if (!val || val.length < 10) { err.textContent='Key inválida.'; err.style.display='block'; return; }
+  apiKey = val; curModel = PROVS[curProv].model;
+  localStorage.setItem('ak', val); localStorage.setItem('ak_'+curProv, val);
+  localStorage.setItem('prov', curProv); localStorage.setItem('model', curModel);
   document.getElementById('apiModal').style.display = 'none';
-}
-
-async function onLoggedIn(user) {
-  const allowed = await checkWhitelist(user.email);
-  if (!allowed) {
-    await sb.auth.signOut();
-    showAuthMsg('❌ E-mail não autorizado: ' + user.email, 'error');
-    return;
-  }
-  document.getElementById('authScreen').style.display = 'none';
-  const chip = document.getElementById('userChip');
-  const em = document.getElementById('userEmail');
-  chip.style.display = 'flex';
-  em.textContent = user.email.split('@')[0];
-  selectProvider(currentProvider);
-  if (apiKey && apiKey.length > 10) {
-    document.getElementById('apiModal').style.display = 'none';
-    initApp();
-  } else {
-    document.getElementById('apiModal').style.display = 'flex';
-  }
-}
-
-async function checkWhitelist(email) {
-  try {
-    const r = await fetch('/.netlify/functions/check-access', {
-      method: 'POST', headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({email})
-    });
-    const d = await r.json();
-    return d.allowed === true;
-  } catch { return false; }
-}
-
-// ════════════════════════════════════════════════════════════════
-//  PROVIDER SELECTION
-// ════════════════════════════════════════════════════════════════
-const PROVIDERS = {
-  anthropic: {
-    name: 'Anthropic Claude',
-    placeholder: 'sk-ant-api03-...',
-    hint: 'console.anthropic.com',
-    link: 'https://console.anthropic.com',
-    model: 'claude-sonnet-4-6',
-    info: 'Modelo: claude-sonnet-4-6 · Melhor qualidade de storytelling',
-    validate: k => k.startsWith('sk-ant-')
-  },
-  openai: {
-    name: 'OpenAI GPT-4o',
-    placeholder: 'sk-proj-...',
-    hint: 'platform.openai.com/api-keys',
-    link: 'https://platform.openai.com/api-keys',
-    model: 'gpt-4o',
-    info: 'Modelo: gpt-4o · Ótimo para criatividade visual',
-    validate: k => k.startsWith('sk-')
-  },
-  groq: {
-    name: 'Groq (Llama 3)',
-    placeholder: 'gsk_...',
-    hint: 'console.groq.com — gratuito com limites generosos',
-    link: 'https://console.groq.com',
-    model: 'llama-3.3-70b-versatile',
-    info: 'Modelo: llama-3.3-70b · Mais rápido e com plano gratuito',
-    validate: k => k.startsWith('gsk_') || k.length > 20
-  }
-};
-
-function selectProvider(prov) {
-  currentProvider = prov;
-  const cfg = PROVIDERS[prov];
-  // Update buttons
-  Object.keys(PROVIDERS).forEach(p => {
-    const btn = document.getElementById('prov-' + p);
-    if(btn) btn.classList.toggle('active', p === prov);
-  });
-  // Update input
-  const input = document.getElementById('apiKeyInput');
-  const hint  = document.getElementById('keyHint');
-  const link  = document.getElementById('keyLink');
-  const info  = document.getElementById('providerInfo');
-  if(input) input.placeholder = cfg.placeholder;
-  if(link)  { link.href = cfg.link; link.textContent = cfg.hint; }
-  if(info)  info.textContent = cfg.info;
-  // Pre-fill if saved
-  const saved = localStorage.getItem('animacao_apikey_' + prov);
-  if(saved && input) input.value = saved;
-  else if(input) input.value = '';
-  document.getElementById('modalError').style.display = 'none';
-}
-
-// ════════════════════════════════════════════════════════════════
-//  API KEY
-// ════════════════════════════════════════════════════════════════
-function saveApiKey() {
-  const val = document.getElementById('apiKeyInput').value.trim();
-  const err = document.getElementById('modalError');
-  const cfg = PROVIDERS[currentProvider];
-  if (!val || !cfg.validate(val)) {
-    err.textContent = 'Key inválida para ' + cfg.name + '. Verifique e tente novamente.';
-    err.style.display = 'block'; return;
-  }
-  apiKey = val;
-  currentModel = cfg.model;
-  localStorage.setItem('animacao_apikey', val);
-  localStorage.setItem('animacao_apikey_' + currentProvider, val);
-  localStorage.setItem('animacao_provider', currentProvider);
-  localStorage.setItem('animacao_model', currentModel);
-  document.getElementById('apiModal').style.display = 'none';
+  document.getElementById('provChip').textContent = PROVS[curProv].chip;
   initApp();
 }
 
-// ════════════════════════════════════════════════════════════════
-//  APP INIT
-// ════════════════════════════════════════════════════════════════
+// ══ APP ══
 function initApp() {
-  // Update provider badge
-  const badge = document.getElementById('providerBadge');
-  const provNames = {anthropic:'🟣 Claude', openai:'⚫ GPT-4o', groq:'🟠 Groq'};
-  if(badge) badge.textContent = provNames[currentProvider] || currentProvider;
-  document.getElementById('chatMessages').innerHTML = '';
+  document.getElementById('provChip').textContent = PROVS[curProv].chip;
+  document.getElementById('chatMsgs').innerHTML='';
   appendWelcome();
 }
 
 function appendWelcome() {
-  const c = document.getElementById('chatMessages');
-  const el = document.createElement('div');
-  el.className = 'welcome';
-  el.innerHTML = `<div class="welcome-title">🎬 ANIMAÇÃO MASTER L99 <span style="font-size:13px;color:var(--purple)">v6.0</span></div>
-    <div class="welcome-sub">GODMODE · 10 Camadas de Storytelling · VEO 3.1 + Omni Flash + Seedance 2</div>
-    <div class="wgrid">
-      <div class="wf">Função estruturada + micro-movimentos</div>
-      <div class="wf">Modo 8s = painéis individuais VEO 3.1</div>
-      <div class="wf">Crítico interno + 3 ciclos refinamento</div>
-      <div class="wf">10 prompts de imagem por entrega</div>
-    </div>`;
-  c.appendChild(el);
-  renderEtapa1Form();
+  const c=document.getElementById('chatMsgs');
+  const el=document.createElement('div'); el.className='welcome';
+  el.innerHTML='<div class="welcome-title">🎬 ANIMAÇÃO MASTER L99 <span style="font-size:13px;color:var(--purple)">v6.0</span></div><div class="welcome-sub">GODMODE · 10 Camadas de Storytelling · VEO 3.1 + Omni Flash + Seedance 2</div><div class="wgrid"><div class="wf">Função estruturada + micro-movimentos</div><div class="wf">Modo 8s = painéis individuais VEO 3.1</div><div class="wf">Crítico interno + 3 ciclos refinamento</div><div class="wf">10 prompts de imagem por entrega</div></div>';
+  c.appendChild(el); renderForm();
 }
 
-// ════════════════════════════════════════════════════════════════
-//  ETAPA 1 FORM
-// ════════════════════════════════════════════════════════════════
-function renderEtapa1Form() {
-  const c = document.getElementById('chatMessages');
-  const form = document.createElement('div');
-  form.id = 'etapa1Form'; form.className = 'msg agent';
-  const body = document.createElement('div');
-  body.className = 'msg-body'; body.style.padding = '14px 16px';
+// ══ ETAPA 1 FORM ══
+function renderForm() {
+  const c=document.getElementById('chatMsgs');
+  const form=document.createElement('div'); form.id='etapa1Form'; form.className='msg agent';
+  const body=document.createElement('div'); body.className='msg-body'; body.style.padding='14px 16px';
+  const sel={duracao:null,sbDuracao:null,orientacao:'16:9 horizontal',audio:null,dialogo:null,roteiro:null};
 
-  const sel = { duracao:null, sbDuracao:null, orientacao:'16:9 horizontal', audio:null, dialogo:null, roteiro:null };
-
-  function mkGroup(label, key, opts, color) {
-    const w = document.createElement('div'); w.className = 'form-group';
-    const l = document.createElement('span'); l.className = 'form-label'; l.textContent = '→ ' + label;
-    w.appendChild(l);
-    const g = document.createElement('div'); g.className = 'form-btns';
-    opts.forEach(opt => {
-      const btn = document.createElement('button'); btn.className = 'qbtn'; btn.textContent = opt.label;
-      btn.addEventListener('click', () => {
-        g.querySelectorAll('.qbtn').forEach(b => { b.style.background=''; b.style.color=''; b.style.borderColor=''; });
-        btn.style.background = color==='blue'?'var(--accent3)':color==='purple'?'var(--purple)':'var(--accent)';
-        btn.style.color = 'var(--black)';
-        btn.style.borderColor = 'transparent';
-        if (opt.value === null) {
-          if (key === 'roteiro') { const ta=document.getElementById('userInput'); ta.value='IDEIA: '; ta.focus(); ta.setSelectionRange(7,7); updateCount(); }
-          else document.getElementById('userInput').focus();
-        } else {
-          sel[key] = opt.value;
-          if (key === 'orientacao') currentOrientacao = opt.value.includes('9:16') ? '9:16' : '16:9';
-          mirrorSel(sel); checkReady();
-        }
+  function mkG(label,key,opts,color) {
+    const w=document.createElement('div'); w.className='form-grp';
+    const l=document.createElement('span'); l.className='form-lbl'; l.textContent='→ '+label; w.appendChild(l);
+    const g=document.createElement('div'); g.className='form-btns';
+    opts.forEach(opt=>{
+      const btn=document.createElement('button'); btn.className='qbtn'; btn.textContent=opt.label;
+      btn.addEventListener('click',()=>{
+        g.querySelectorAll('.qbtn').forEach(b=>{b.style.background='';b.style.color='';b.style.borderColor='';});
+        btn.style.background=color==='blue'?'var(--accent3)':color==='purple'?'var(--purple)':'var(--accent)';
+        btn.style.color='var(--black)'; btn.style.borderColor='transparent';
+        if(opt.value===null){const ta=document.getElementById('userIn');if(key==='roteiro'){ta.value='IDEIA: ';ta.focus();ta.setSelectionRange(7,7);updateCnt();}else ta.focus();}
+        else{sel[key]=opt.value;if(key==='orientacao'){}mirrorSel(sel);checkReady();}
       });
       g.appendChild(btn);
     });
     w.appendChild(g); return w;
   }
 
-  // Char upload section
-  const cs = document.createElement('div'); cs.className='form-group'; cs.style.borderBottom='1px solid var(--border)'; cs.style.paddingBottom='10px';
-  const cl = document.createElement('span'); cl.className='form-label'; cl.textContent='→ 👤 Imagens dos Personagens';
-  const cd = document.createElement('div'); cd.style.cssText='border:1px dashed var(--border);padding:10px;text-align:center;cursor:pointer;font-size:12px;color:var(--muted);';
+  // Char upload
+  const cs=document.createElement('div'); cs.className='form-grp'; cs.style.cssText='border-bottom:1px solid var(--border);padding-bottom:10px;';
+  const cl=document.createElement('span'); cl.className='form-lbl'; cl.textContent='→ 👤 Imagens dos Personagens';
+  const cd=document.createElement('div'); cd.style.cssText='border:1px dashed var(--border);padding:10px;text-align:center;cursor:pointer;font-size:12px;color:var(--muted);';
   cd.textContent='Clique ou arraste imagens dos personagens';
   cd.onclick=()=>document.getElementById('fileInput').click();
   cd.ondragover=e=>{e.preventDefault();cd.style.borderColor='var(--accent)';};
@@ -1562,110 +402,79 @@ function renderEtapa1Form() {
   cd.ondrop=e=>{e.preventDefault();cd.style.borderColor='var(--border)';Array.from(e.dataTransfer.files).forEach(f=>{if(f.type.startsWith('image/'))addImg(f);});};
   cs.appendChild(cl); cs.appendChild(cd); body.appendChild(cs);
 
-  body.appendChild(mkGroup('Duração Total','duracao',[
-    {label:'30s',value:'30 segundos'},{label:'1 minuto',value:'1 minuto'},{label:'2 minutos',value:'2 minutos'},
-    {label:'3 minutos',value:'3 minutos'},{label:'5 minutos',value:'5 minutos'},{label:'Definir ✏️',value:null}],'accent'));
-  body.appendChild(mkGroup('Duração das Cenas','sbDuracao',[
-    {label:'8s — VEO 3.1',value:'8s'},{label:'10s — Omni',value:'10s'},
-    {label:'12s — Seedance',value:'12s'},{label:'15s — Seedance',value:'15s'}],'accent'));
-  body.appendChild(mkGroup('Orientação','orientacao',[
-    {label:'▬ 16:9 Horizontal',value:'16:9 horizontal'},{label:'▮ 9:16 Vertical',value:'9:16 vertical'}],'blue'));
-  body.appendChild(mkGroup('Áudio','audio',[
-    {label:'🔇 Sem música',value:'sem música'},{label:'🎵 Momentos',value:'música em momentos especiais'},{label:'🎶 Trilha',value:'trilha sonora contínua'}],'accent'));
-  body.appendChild(mkGroup('Diálogo','dialogo',[
-    {label:'🤐 Nenhum',value:'nenhum diálogo'},{label:'💬 Pouco',value:'pouco diálogo'},{label:'🗣️ Médio',value:'diálogo médio'}],'accent'));
-  body.appendChild(mkGroup('Roteiro','roteiro',[
-    {label:'💡 Gerar 5 ideias',value:'gerar 5 ideias'},{label:'✍️ Tenho minha ideia',value:null}],'purple'));
+  body.appendChild(mkG('Duração Total','duracao',[{label:'30s',value:'30 segundos'},{label:'1 min',value:'1 minuto'},{label:'2 min',value:'2 minutos'},{label:'3 min',value:'3 minutos'},{label:'5 min',value:'5 minutos'},{label:'Definir ✏️',value:null}],'accent'));
+  body.appendChild(mkG('Duração das Cenas','sbDuracao',[{label:'8s — VEO 3.1',value:'8s'},{label:'10s — Omni',value:'10s'},{label:'12s — Seedance',value:'12s'},{label:'15s — Seedance',value:'15s'}],'accent'));
+  body.appendChild(mkG('Orientação','orientacao',[{label:'▬ 16:9 Horizontal',value:'16:9 horizontal'},{label:'▮ 9:16 Vertical',value:'9:16 vertical'}],'blue'));
+  body.appendChild(mkG('Áudio','audio',[{label:'🔇 Sem música',value:'sem música'},{label:'🎵 Momentos',value:'música em momentos especiais'},{label:'🎶 Trilha',value:'trilha sonora contínua'}],'accent'));
+  body.appendChild(mkG('Diálogo','dialogo',[{label:'🤐 Nenhum',value:'nenhum diálogo'},{label:'💬 Pouco',value:'pouco diálogo'},{label:'🗣️ Médio',value:'diálogo médio'}],'accent'));
+  body.appendChild(mkG('Roteiro','roteiro',[{label:'💡 Gerar 5 ideias',value:'gerar 5 ideias'},{label:'✍️ Minha ideia',value:null}],'purple'));
 
-  const note = document.createElement('p'); note.id='cfgNote';
-  note.style.cssText='font-size:11px;color:var(--muted);margin:8px 0;font-family:JetBrains Mono,monospace;';
-  note.textContent='Preencha as opções para liberar o botão.'; body.appendChild(note);
-
-  const startBtn = document.createElement('button'); startBtn.id='etapa1StartBtn';
+  const note=document.createElement('p'); note.id='cfgNote'; note.style.cssText='font-size:11px;color:var(--muted);margin:8px 0;font-family:JetBrains Mono,monospace;'; note.textContent='Preencha as opções para liberar o botão.'; body.appendChild(note);
+  const startBtn=document.createElement('button'); startBtn.id='etapa1StartBtn';
   startBtn.style.cssText='width:100%;padding:10px;background:var(--border);border:none;color:var(--muted);font-family:Bebas Neue,sans-serif;font-size:16px;letter-spacing:2px;cursor:not-allowed;margin-top:4px;transition:all 0.15s;';
   startBtn.textContent='▶ INICIAR PROJETO'; startBtn.disabled=true;
-  startBtn.addEventListener('click', () => {
-    if(startBtn.disabled) return;
+  startBtn.addEventListener('click',()=>{
+    if(startBtn.disabled)return;
     const parts=['📋 CONFIGURAÇÃO DO PROJETO:'];
-    if(pendingImages.length) parts.push('Personagens: '+pendingImages.map(i=>fileToTag(i.name)).join(', '));
-    if(sel.duracao) parts.push('Duração total: '+sel.duracao);
-    if(sel.sbDuracao) parts.push('Duração das cenas: '+sel.sbDuracao);
-    if(sel.orientacao) parts.push('Orientação: '+sel.orientacao);
-    if(sel.audio) parts.push('Áudio: '+sel.audio);
-    if(sel.dialogo) parts.push('Diálogo: '+sel.dialogo);
-    if(sel.roteiro) parts.push('Roteiro: '+sel.roteiro);
-    const taVal=document.getElementById('userInput').value.trim();
-    if(taVal) parts.push('Ideia: '+taVal);
+    if(pendingImgs.length)parts.push('Personagens: '+pendingImgs.map(i=>i.name.replace(/\.[^.]+$/,'')).join(', '));
+    Object.entries({duracao:'Duração total',sbDuracao:'Duração das cenas',orientacao:'Orientação',audio:'Áudio',dialogo:'Diálogo',roteiro:'Roteiro'}).forEach(([k,l])=>{if(sel[k])parts.push(l+': '+sel[k]);});
+    const ta=document.getElementById('userIn'); if(ta.value.trim())parts.push('Ideia: '+ta.value.trim());
     const msg=parts.join('\n');
     startBtn.textContent='✓ INICIADO'; startBtn.style.cssText='width:100%;padding:10px;background:var(--success);border:none;color:var(--black);font-family:Bebas Neue,sans-serif;font-size:14px;letter-spacing:1px;cursor:default;';
     startBtn.disabled=true; form.style.opacity='0.6'; form.style.pointerEvents='none';
-    etapa1Pending=false; updateIniciarBtn(false);
-    const ta=document.getElementById('userInput'); ta.value=''; ta.style.height=''; updateCount();
+    etapa1Pending=false; document.getElementById('btnIniciar').style.display='none';
+    ta.value=''; ta.style.height=''; updateCnt();
     const blocks=[];
-    pendingImages.forEach(i=>blocks.push({type:'image',source:{type:'base64',media_type:i.mediaType,data:i.base64}}));
+    pendingImgs.forEach(i=>blocks.push({type:'image',source:{type:'base64',media_type:i.mediaType,data:i.base64}}));
     blocks.push({type:'text',text:msg});
-    appendMsg('user',msg,pendingImages.slice());
-    sendToAPI(blocks); advanceStage(1);
+    appendMsg('user',msg,pendingImgs.slice()); sendToAPI(blocks); advStage(1);
   });
   body.appendChild(startBtn);
 
   function checkReady(){
     const ok=['sbDuracao','orientacao','audio','dialogo'].every(k=>sel[k]!==null);
-    startBtn.disabled=!ok;
-    startBtn.style.background=ok?'var(--accent)':'var(--border)';
-    startBtn.style.color=ok?'var(--black)':'var(--muted)';
-    startBtn.style.cursor=ok?'pointer':'not-allowed';
-    if(ok){note.textContent='✓ Pronto — clique para iniciar!';note.style.color='var(--success)';updateIniciarBtn(true);}
+    startBtn.disabled=!ok; startBtn.style.background=ok?'var(--accent)':'var(--border)'; startBtn.style.color=ok?'var(--black)':'var(--muted)'; startBtn.style.cursor=ok?'pointer':'not-allowed';
+    if(ok){note.textContent='✓ Pronto — clique para iniciar!';note.style.color='var(--success)';document.getElementById('btnIniciar').style.display='';}
   }
   form.appendChild(body); c.appendChild(form); c.scrollTop=c.scrollHeight;
 }
 
 function mirrorSel(sel){
-  const ta=document.getElementById('userInput');
-  const map={duracao:'Duração',sbDuracao:'Cenas',orientacao:'Orientação',audio:'Áudio',dialogo:'Diálogo',roteiro:'Roteiro'};
-  if(!ta.value.startsWith('IDEIA:')){ta.value=Object.keys(map).filter(k=>sel[k]).map(k=>map[k]+': '+sel[k]).join('\n');ta.style.height='auto';ta.style.height=Math.min(ta.scrollHeight,140)+'px';updateCount();}
+  const ta=document.getElementById('userIn');
+  if(!ta.value.startsWith('IDEIA:')){const map={duracao:'Duração',sbDuracao:'Cenas',orientacao:'Orientação',audio:'Áudio',dialogo:'Diálogo',roteiro:'Roteiro'};ta.value=Object.keys(map).filter(k=>sel[k]).map(k=>map[k]+': '+sel[k]).join('\n');ta.style.height='auto';ta.style.height=Math.min(ta.scrollHeight,140)+'px';updateCnt();}
 }
+function iniciarProj(){const b=document.getElementById('etapa1StartBtn');if(b&&!b.disabled)b.click();}
 
-// ════════════════════════════════════════════════════════════════
-//  CHAT / API
-// ════════════════════════════════════════════════════════════════
-let currentOrientacao='16:9';
-function fileToTag(n){return n.replace(/\.[^.]+$/,'').replace(/\s+/g,'_');}
-function updateIniciarBtn(v){const b=document.getElementById('btnIniciarGlobal');if(b)b.style.display=v?'':'none';}
-function iniciarProjeto(){const b=document.getElementById('etapa1StartBtn');if(b&&!b.disabled)b.click();}
-
+// ══ IMAGES ══
 function addImg(file){
-  const r=new FileReader(); r.onload=e=>{
-    const du=e.target.result,pts=du.split(',');
-    const mime=pts[0].match(/:(.*?);/);
-    pendingImages.push({base64:pts[1],mediaType:mime?mime[1]:'image/jpeg',name:file.name,thumb:du});
-    renderPreviews();
-  }; r.readAsDataURL(file);
+  const r=new FileReader();
+  r.onload=e=>{const du=e.target.result,pts=du.split(','),mime=pts[0].match(/:(.*?);/);pendingImgs.push({base64:pts[1],mediaType:mime?mime[1]:'image/jpeg',name:file.name,thumb:du});renderPrevs();};
+  r.readAsDataURL(file);
 }
 function handleFiles(e){
   Array.from(e.target.files||[]).forEach(f=>{
     if(f.type.startsWith('image/'))addImg(f);
-    else if(f.name.match(/\.(srt|vtt|txt)$/i)){const r=new FileReader();r.onload=ev=>{const ta=document.getElementById('userInput');ta.value=(ta.value?ta.value+'\n\n':'')+('📄 SRT: '+f.name+'\n'+ev.target.result.substring(0,4000));ta.style.height='auto';ta.style.height=Math.min(ta.scrollHeight,140)+'px';updateCount();showToast('✅ '+f.name+' carregado');};r.readAsText(f,'utf-8');}
+    else if(f.name.match(/\.(srt|vtt|txt)$/i)){const r=new FileReader();r.onload=ev=>{const ta=document.getElementById('userIn');ta.value=(ta.value?ta.value+'\n\n':'')+('📄 SRT: '+f.name+'\n'+ev.target.result.substring(0,4000));ta.style.height='auto';ta.style.height=Math.min(ta.scrollHeight,140)+'px';updateCnt();showToast('✅ '+f.name+' carregado');};r.readAsText(f,'utf-8');}
   }); e.target.value='';
 }
-function renderPreviews(){
-  const s=document.getElementById('previewStrip'),b=document.getElementById('imgBadge');
+function renderPrevs(){
+  const s=document.getElementById('prevStrip'),b=document.getElementById('iBadge');
   s.innerHTML='';
-  if(!pendingImages.length){b.textContent='';const h=document.createElement('span');h.className='no-img-hint';h.textContent='Nenhuma imagem anexada';s.appendChild(h);return;}
-  b.textContent='📎 '+pendingImages.length;
-  pendingImages.forEach((img,i)=>{
-    const w=document.createElement('div');w.className='preview-item';
+  if(!pendingImgs.length){b.textContent='';const h=document.createElement('span');h.className='no-img';h.textContent='Nenhuma imagem anexada';s.appendChild(h);return;}
+  b.textContent='📎 '+pendingImgs.length;
+  pendingImgs.forEach((img,i)=>{
+    const w=document.createElement('div');w.className='prev-item';
     const im=document.createElement('img');im.src=img.thumb;im.title=img.name;
-    const rm=document.createElement('button');rm.className='remove-img';rm.textContent='✕';rm.onclick=()=>{pendingImages.splice(i,1);renderPreviews();};
+    const rm=document.createElement('button');rm.className='rm-img';rm.textContent='✕';rm.onclick=()=>{pendingImgs.splice(i,1);renderPrevs();};
     w.appendChild(im);w.appendChild(rm);s.appendChild(w);
   });
 }
 
+// ══ SEND ══
 async function sendMsg(){
-  const ta=document.getElementById('userInput');
-  const txt=ta.value.trim(); const imgs=[...pendingImages];
-  if(!txt&&!imgs.length)return;
-  if(isProcessing)return;
+  const ta=document.getElementById('userIn');
+  const txt=ta.value.trim(); const imgs=[...pendingImgs];
+  if(!txt&&!imgs.length)return; if(isProcessing)return;
   if(etapa1Pending){
     const sb2=document.getElementById('etapa1StartBtn');
     if(sb2&&!sb2.disabled){sb2.click();return;}
@@ -1677,11 +486,10 @@ async function sendMsg(){
   imgs.forEach(i=>blocks.push({type:'image',source:{type:'base64',media_type:i.mediaType,data:i.base64}}));
   blocks.push({type:'text',text:txt||(imgs.length===1?'Analise esta imagem.':'Analise estas imagens.')});
   appendMsg('user',txt||'📎 '+imgs.length+' imagem(ns)',imgs);
-  ta.value='';ta.style.height='';pendingImages=[];renderPreviews();updateCount();
+  ta.value='';ta.style.height='';pendingImgs=[];renderPrevs();updateCnt();
   await sendToAPI(blocks);
 }
-
-function qsend(txt){if(isProcessing)return;appendMsg('user',txt);sendToAPI([{type:'text',text:txt}]);}
+function qs(txt){if(isProcessing)return;appendMsg('user',txt);sendToAPI([{type:'text',text:txt}]);}
 
 async function sendToAPI(blocks){
   if(isProcessing)return;
@@ -1689,38 +497,34 @@ async function sendToAPI(blocks){
   document.getElementById('sendBtn').disabled=true;
   document.querySelectorAll('.qbtn').forEach(b=>b.disabled=true);
   history.push({role:'user',content:blocks});
-  showThinking();
+  showThink();
   const labels=['Analisando...','Construindo roteiro...','Gerando storyboard...','Refinando prompts...'];
-  let li=0; const iv=setInterval(()=>{const e=document.getElementById('thinkLabel');if(e)e.textContent=labels[li%labels.length];li++;},1800);
+  let li=0; const iv=setInterval(()=>{const e=document.getElementById('thinkLbl');if(e)e.textContent=labels[li%labels.length];li++;},1800);
   try{
-    let msgs=history;
-    if(history.length>22) msgs=[...history.slice(0,2),...history.slice(-20)];
-    const resp=await fetch('/.netlify/functions/chat',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({apiKey, provider:currentProvider, model:currentModel, messages:msgs})
-    });
-    clearInterval(iv);hideThinking();
+    const msgs=history.length>22?[...history.slice(0,2),...history.slice(-20)]:history;
+    const resp=await fetch('/.netlify/functions/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({apiKey,provider:curProv,model:curModel,messages:msgs})});
+    clearInterval(iv);hideThink();
     if(!resp.ok){const err=await resp.json().catch(()=>({}));throw new Error(err.error||'Erro '+resp.status);}
     const data=await resp.json();
     history.push({role:'assistant',content:data.text});
     appendMsg('agent',data.text);
-    checkTokenWarn();
-  }catch(err){clearInterval(iv);hideThinking();appendMsg('agent','**⚠️ Erro:** '+err.message);}
+    checkTokWarn();
+  }catch(err){clearInterval(iv);hideThink();appendMsg('agent','**⚠️ Erro:** '+err.message);}
   isProcessing=false;
   document.getElementById('sendBtn').disabled=false;
   document.querySelectorAll('.qbtn').forEach(b=>b.disabled=false);
 }
 
+// ══ MESSAGES ══
 function renderMD(t){return t.replace(/```([\s\S]*?)```/g,(_,c)=>'<pre>'+esc(c)+'</pre>').replace(/`([^`]+)`/g,(_,c)=>'<code>'+esc(c)+'</code>').replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>').replace(/\*([^*]+)\*/g,'<em>$1</em>').replace(/^#{1,3}\s+(.+)$/gm,'<strong style="font-size:14px;display:block;margin:6px 0 2px;color:var(--accent)">$1</strong>').replace(/\n/g,'<br>');}
 function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
 function appendMsg(role,text,imgs=[]){
-  const c=document.getElementById('chatMessages');
+  const c=document.getElementById('chatMsgs');
   const m=document.createElement('div');m.className='msg '+role;
-  const label=role==='agent'?'MASTER L99':'VOCÊ';
   const time=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
   let imgsH=imgs.length?'<div style="display:flex;gap:5px;margin-bottom:6px;">'+imgs.map(i=>'<img src="'+i.thumb+'" style="width:44px;height:44px;object-fit:cover;border:1px solid var(--border);">').join('')+'</div>':'';
-  m.innerHTML='<div class="msg-header"><div class="dot"></div><span>'+label+'</span><span style="opacity:0.4">'+time+'</span></div><div class="msg-body">'+imgsH+renderMD(text)+'</div>';
+  m.innerHTML='<div class="msg-hdr"><div class="dot"></div><span>'+(role==='agent'?'MASTER L99':'VOCÊ')+'</span><span style="opacity:0.4">'+time+'</span></div><div class="msg-body">'+imgsH+renderMD(text)+'</div>';
   if(role==='agent'){
     const mb=m.querySelector('.msg-body');
     const cp=document.createElement('button');cp.className='cp-btn';cp.textContent='Copiar';
@@ -1734,39 +538,39 @@ function appendMsg(role,text,imgs=[]){
 function extractData(text){
   const sbN=text.match(/STORYBOARD\s+(\d+)/i);
   if(sbN){const n=parseInt(sbN[1]);if(!sbHistory.find(s=>s.num===n)){const nm=text.match(/STORYBOARD\s+\d+[^\n]*—\s*([^"\n]{3,40})/i);sbHistory.push({num:n,name:nm?nm[1].trim():'Storyboard '+n,text});document.getElementById('sbDone').textContent=sbHistory.length;renderSbList();}}
-  const tot=text.match(/Total.*?(\d+)\s+Storyboard/i);if(tot){sbTotalExpected=parseInt(tot[1]);document.getElementById('sbTotal').textContent=tot[1];}
-  if(sbTotalExpected>0)document.getElementById('sbProgressFill').style.width=Math.min(sbHistory.length/sbTotalExpected*100,100)+'%';
-  if(text.match(/ficha.*personagem|lock de estilo/i))advanceStage(2);
-  if(text.match(/IDEIA [12345]/i))advanceStage(3);
-  if(text.match(/ROTEIRO MESTRE|\[00:00/i))advanceStage(4);
-  if(text.match(/Storyboard 01|Storyboard 02/i))advanceStage(5);
-  if(text.match(/STORYBOARD \d+|PAINEL \d+/i))advanceStage(6);
-  if(text.match(/CHARACTER 1:|VEO 3\.1|Omni Flash|Seedance/i))advanceStage(7);
+  const tot=text.match(/Total.*?(\d+)\s+Storyboard/i);if(tot){sbTotal=parseInt(tot[1]);document.getElementById('sbTotal').textContent=tot[1];}
+  if(sbTotal>0)document.getElementById('sbFill').style.width=Math.min(sbHistory.length/sbTotal*100,100)+'%';
+  if(text.match(/ficha.*personagem|lock de estilo/i))advStage(2);
+  if(text.match(/IDEIA [12345]/i))advStage(3);
+  if(text.match(/ROTEIRO MESTRE|\[00:00/i))advStage(4);
+  if(text.match(/Storyboard 01|Storyboard 02/i))advStage(5);
+  if(text.match(/STORYBOARD \d+|PAINEL \d+/i))advStage(6);
+  if(text.match(/CHARACTER 1:|VEO 3\.1|Omni Flash|Seedance/i))advStage(7);
 }
 function renderSbList(){
-  const list=document.getElementById('sbHistoryList');list.innerHTML='';
+  const list=document.getElementById('sbList');list.innerHTML='';
   if(!sbHistory.length){list.innerHTML='<div class="sb-empty">Nenhum ainda.</div>';return;}
-  sbHistory.forEach(sb2=>{
+  sbHistory.forEach(sb=>{
     const e=document.createElement('div');e.className='sb-entry';
-    const n=document.createElement('span');n.className='sb-num';n.textContent='SB'+String(sb2.num).padStart(2,'0');
-    const nm=document.createElement('span');nm.className='sb-name';nm.textContent=sb2.name;
-    const cp=document.createElement('button');cp.className='sb-copy';cp.textContent='📋';
-    cp.onclick=ev=>{ev.stopPropagation();navigator.clipboard.writeText(sb2.text).then(()=>{cp.textContent='✓';setTimeout(()=>cp.textContent='📋',1500);showToast('✓ SB'+sb2.num+' copiado!');});};
+    const n=document.createElement('span');n.className='sb-num';n.textContent='SB'+String(sb.num).padStart(2,'0');
+    const nm=document.createElement('span');nm.className='sb-name';nm.textContent=sb.name;
+    const cp=document.createElement('button');cp.className='sb-cp';cp.textContent='📋';
+    cp.onclick=ev=>{ev.stopPropagation();navigator.clipboard.writeText(sb.text).then(()=>{cp.textContent='✓';setTimeout(()=>cp.textContent='📋',1500);showToast('✓ SB'+sb.num+' copiado!');});};
     e.appendChild(n);e.appendChild(nm);e.appendChild(cp);
-    e.onclick=()=>navigator.clipboard.writeText(sb2.text).then(()=>{e.style.borderColor='var(--success)';setTimeout(()=>e.style.borderColor='',1500);showToast('✓ SB'+sb2.num+' copiado!');});
+    e.onclick=()=>navigator.clipboard.writeText(sb.text).then(()=>{e.style.borderColor='var(--success)';setTimeout(()=>e.style.borderColor='',1500);showToast('✓ SB'+sb.num+' copiado!');});
     list.appendChild(e);
   });
 }
-function advanceStage(n){for(let i=1;i<=7;i++){const el=document.getElementById('s'+i);if(!el)continue;const sn=el.querySelector('.snum');if(i<n){el.className='stage-item done';if(sn)sn.textContent='✓';}else if(i===n){el.className='stage-item active';}else{el.className='stage-item disabled';}}}
-function showThinking(){const c=document.getElementById('chatMessages');const el=document.createElement('div');el.id='thinking';el.className='msg agent';el.innerHTML='<div class="msg-header"><div class="dot"></div><span>MASTER L99</span></div><div class="thinking"><div class="thinking-dots"><span></span><span></span><span></span></div><span class="thinking-label" id="thinkLabel">Analisando...</span></div>';c.appendChild(el);c.scrollTop=c.scrollHeight;}
-function hideThinking(){const e=document.getElementById('thinking');if(e)e.remove();}
-function reiniciar(){if(isProcessing)return;history=[];pendingImages=[];sbHistory=[];sbTotalExpected=0;etapa1Pending=true;document.getElementById('chatMessages').innerHTML='';document.getElementById('userInput').value='';document.getElementById('sbDone').textContent='0';document.getElementById('sbTotal').textContent='?';document.getElementById('sbProgressFill').style.width='0%';renderPreviews();renderSbList();updateCount();updateIniciarBtn(false);advanceStage(1);appendWelcome();}
-function updateCount(){const n=document.getElementById('userInput').value.length;document.getElementById('charBadge').textContent=n;}
-function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}const ta=document.getElementById('userInput');setTimeout(()=>{ta.style.height='auto';ta.style.height=Math.min(ta.scrollHeight,140)+'px';},0);updateCount();}
-function checkTokenWarn(){const total=history.reduce((s,m)=>{const c=Array.isArray(m.content)?m.content.filter(b=>b.type==='text').map(b=>b.text).join(''):m.content||'';return s+c.length;},0);const w=document.getElementById('tokenWarning');if(w)w.classList.toggle('visible',total>60000||history.length>30);}
+function advStage(n){for(let i=1;i<=7;i++){const el=document.getElementById('s'+i);if(!el)continue;const sn=el.querySelector('.snum');if(i<n){el.className='stage-item done';if(sn)sn.textContent='✓';}else if(i===n){el.className='stage-item active';}else{el.className='stage-item disabled';}}}
+function showThink(){const c=document.getElementById('chatMsgs');const el=document.createElement('div');el.id='thinking';el.className='msg agent';el.innerHTML='<div class="msg-hdr"><div class="dot"></div><span>MASTER L99</span></div><div class="thinking"><div class="thinking-dots"><span></span><span></span><span></span></div><span class="thinking-lbl" id="thinkLbl">Analisando...</span></div>';c.appendChild(el);c.scrollTop=c.scrollHeight;}
+function hideThink(){const e=document.getElementById('thinking');if(e)e.remove();}
+function reiniciar(){if(isProcessing)return;history=[];pendingImgs=[];sbHistory=[];sbTotal=0;etapa1Pending=true;document.getElementById('chatMsgs').innerHTML='';document.getElementById('userIn').value='';document.getElementById('sbDone').textContent='0';document.getElementById('sbTotal').textContent='?';document.getElementById('sbFill').style.width='0%';document.getElementById('btnIniciar').style.display='none';renderPrevs();renderSbList();updateCnt();advStage(1);appendWelcome();}
+function updateCnt(){document.getElementById('cBadge').textContent=document.getElementById('userIn').value.length;}
+function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}const ta=document.getElementById('userIn');setTimeout(()=>{ta.style.height='auto';ta.style.height=Math.min(ta.scrollHeight,140)+'px';},0);updateCnt();}
+function checkTokWarn(){const total=history.reduce((s,m)=>{const c=Array.isArray(m.content)?m.content.filter(b=>b.type==='text').map(b=>b.text).join(''):m.content||'';return s+c.length;},0);document.getElementById('tokWarn').classList.toggle('visible',total>60000||history.length>30);}
 function showToast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity 0.3s';setTimeout(()=>t.remove(),300);},2200);}
 document.addEventListener('keydown',e=>{if(e.ctrlKey&&e.key==='k'){e.preventDefault();const msgs=document.querySelectorAll('.msg.agent .msg-body');if(msgs.length){navigator.clipboard.writeText(msgs[msgs.length-1].innerText).then(()=>showToast('✓ Copiado!'));}}});
-const us=document.getElementById('uploadStrip');
+const us=document.getElementById('upStrip');
 if(us){us.addEventListener('dragover',e=>{e.preventDefault();us.style.background='rgba(0,212,255,0.04)';});us.addEventListener('dragleave',()=>us.style.background='');us.addEventListener('drop',e=>{e.preventDefault();us.style.background='';Array.from(e.dataTransfer.files).forEach(f=>{if(f.type.startsWith('image/'))addImg(f);});});}
 </script>
 </body>
