@@ -186,6 +186,12 @@ textarea::placeholder{color:var(--muted);}
       <div class="ptab" id="pt-groq" onclick="setProv('groq')">🟠<br>Groq<br><small>Llama 3</small></div>
     </div>
     <div class="prov-info" id="provInfo">Modelo: claude-sonnet-4-6 · Melhor qualidade de storytelling</div>
+    <label class="api-label">Modelo</label>
+    <select id="modelSelect" style="width:100%;background:var(--black);border:1px solid var(--border);color:var(--text);padding:10px 13px;font-family:'JetBrains Mono',monospace;font-size:12px;outline:none;margin-bottom:12px;cursor:pointer;">
+      <option value="claude-sonnet-4-6">claude-sonnet-4-6 (recomendado)</option>
+      <option value="claude-opus-4-5">claude-opus-4-5 (mais poderoso)</option>
+      <option value="claude-haiku-4-5-20251001">claude-haiku-4-5 (mais rápido)</option>
+    </select>
     <label class="api-label">Sua API Key</label>
     <input type="password" class="api-input" id="apiKeyIn" placeholder="sk-ant-api03-..." autocomplete="off">
     <div class="api-hint">Obtenha em <a href="https://console.anthropic.com" target="_blank" id="apiLink">console.anthropic.com</a><br>Salva só no seu navegador — nunca enviada a terceiros.</div>
@@ -334,6 +340,25 @@ async function doLogout() {
 }
 
 // ── PROVIDER ─────────────────────────────────────────────────────
+const MODELS = {
+  anthropic: [
+    {v:'claude-sonnet-4-6', l:'claude-sonnet-4-6 (recomendado)'},
+    {v:'claude-opus-4-5',   l:'claude-opus-4-5 (mais poderoso)'},
+    {v:'claude-haiku-4-5-20251001', l:'claude-haiku-4-5 (mais rápido)'}
+  ],
+  openai: [
+    {v:'gpt-4o',       l:'gpt-4o (padrão)'},
+    {v:'gpt-4o-mini',  l:'gpt-4o-mini (mais rápido, lê imagens)'},
+    {v:'gpt-4-turbo',  l:'gpt-4-turbo (visão completa)'},
+    {v:'gpt-4.1',      l:'gpt-4.1 (mais recente)'}
+  ],
+  groq: [
+    {v:'llama-3.3-70b-versatile', l:'llama-3.3-70b (recomendado)'},
+    {v:'llama3-8b-8192',          l:'llama3-8b (mais rápido, grátis)'},
+    {v:'mixtral-8x7b-32768',      l:'mixtral-8x7b'}
+  ]
+};
+
 function setProv(p) {
   curProv = p; const cfg = PROVS[p];
   Object.keys(PROVS).forEach(k => document.getElementById('pt-'+k).classList.toggle('active', k===p));
@@ -344,12 +369,22 @@ function setProv(p) {
   const saved = localStorage.getItem('ak_'+p);
   document.getElementById('apiKeyIn').value = saved || '';
   document.getElementById('apiErr').style.display = 'none';
+  // Populate model selector
+  const sel = document.getElementById('modelSelect');
+  if(sel) {
+    sel.innerHTML = MODELS[p].map(m => '<option value="'+m.v+'">'+m.l+'</option>').join('');
+    const savedModel = localStorage.getItem('model_'+p);
+    if(savedModel) sel.value = savedModel;
+  }
 }
 
 function saveKey() {
   const val = document.getElementById('apiKeyIn').value.trim();
   if (!val || val.length < 10) { document.getElementById('apiErr').textContent='Key inválida.'; document.getElementById('apiErr').style.display='block'; return; }
-  apiKey = val; curModel = PROVS[curProv].model;
+  apiKey = val;
+  const modelSel = document.getElementById('modelSelect');
+  curModel = modelSel ? modelSel.value : PROVS[curProv].model;
+  localStorage.setItem('model_'+curProv, curModel);
   localStorage.setItem('ak', val); localStorage.setItem('ak_'+curProv, val);
   localStorage.setItem('prov', curProv); localStorage.setItem('model', curModel);
   document.getElementById('apiModal').style.display = 'none';
