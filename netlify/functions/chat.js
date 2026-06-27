@@ -32,11 +32,11 @@ exports.handler = async (event) => {
 
   const { apiKey, messages, provider } = body;
 
-  if (!apiKey || !apiKey.startsWith('sk-ant-')) {
+  if (!apiKey || apiKey.length < 10) {
     return {
       statusCode: 401,
       headers,
-      body: JSON.stringify({ error: 'API Key inválida. Deve começar com sk-ant-' })
+      body: JSON.stringify({ error: 'API Key inválida ou não informada.' })
     };
   }
 
