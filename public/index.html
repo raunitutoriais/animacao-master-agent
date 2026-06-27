@@ -15,6 +15,27 @@
 body{background:var(--black);color:var(--text);font-family:'Barlow Condensed',sans-serif;
   font-size:15px;height:100vh;display:flex;flex-direction:column;overflow:hidden;}
 
+/* ── LOGIN WALL ── */
+#loginWall{position:fixed;inset:0;background:rgba(7,7,9,0.98);display:flex;
+  align-items:center;justify-content:center;z-index:10000;}
+.login-box{background:var(--deep);border:1px solid var(--border);
+  border-top:3px solid var(--accent);padding:40px;max-width:420px;width:90%;text-align:center;}
+.login-logo{font-family:'Bebas Neue',sans-serif;font-size:30px;color:var(--accent);
+  letter-spacing:3px;margin-bottom:6px;}
+.login-sub{font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;
+  font-family:'JetBrains Mono',monospace;margin-bottom:28px;}
+.login-btn{width:100%;padding:14px;background:var(--accent);border:none;
+  color:var(--black);font-family:'Bebas Neue',sans-serif;font-size:20px;
+  letter-spacing:2px;cursor:pointer;transition:background 0.15s;margin-bottom:10px;}
+.login-btn:hover{background:#fff;}
+.login-note{font-size:10px;color:var(--muted);line-height:1.6;}
+.user-info{display:flex;align-items:center;gap:8px;font-size:11px;
+  color:var(--success);font-family:'JetBrains Mono',monospace;}
+.logout-btn{padding:2px 8px;font-size:10px;font-family:'JetBrains Mono',monospace;
+  background:transparent;border:1px solid rgba(255,77,0,0.4);color:var(--accent2);
+  cursor:pointer;transition:all 0.15s;}
+.logout-btn:hover{background:rgba(255,77,0,0.1);}
+
 /* ── API KEY MODAL ── */
 #apiModal{position:fixed;inset:0;background:rgba(7,7,9,0.96);display:flex;
   align-items:center;justify-content:center;z-index:9999;}
@@ -216,8 +237,22 @@ textarea::placeholder{color:var(--muted);}
 ::-webkit-scrollbar-thumb{background:var(--border);}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
 </style>
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
+
+<!-- LOGIN WALL -->
+<div id="loginWall">
+  <div class="login-box">
+    <div class="login-logo">🎬 ANIMAÇÃO MASTER</div>
+    <div class="login-sub">L99 GODMODE v6 · Acesso Restrito</div>
+    <button class="login-btn" id="loginBtn" onclick="netlifyLogin()">▶ ENTRAR / CRIAR CONTA</button>
+    <div class="login-note">
+      Use seu e-mail e senha para acessar.<br>
+      Primeira vez? Clique acima e escolha "Sign up".
+    </div>
+  </div>
+</div>
 
 <!-- API KEY MODAL -->
 <div id="apiModal">
@@ -244,6 +279,11 @@ textarea::placeholder{color:var(--muted);}
     <p>Super Roteirista + Diretor Cinematográfico AI · v6.0</p>
   </div>
   <div class="header-right">
+    <div class="user-info" id="userInfo" style="display:none;">
+      <span class="key-dot"></span>
+      <span id="userEmail"></span>
+      <button class="logout-btn" onclick="netlifyLogout()">Sair</button>
+    </div>
     <div class="key-indicator" onclick="changeApiKey()" title="Clique para trocar a API Key">
       <span class="key-dot"></span>
       <span id="keyLabel">API Conectada</span>
@@ -368,17 +408,81 @@ function changeApiKey() {
   document.getElementById('apiModal').style.display = 'flex';
 }
 
-// Check if key already saved
+// ════════════════════════════════════════════════════════════════
+//  AUTH — Netlify Identity
+// ════════════════════════════════════════════════════════════════
 window.addEventListener('load', () => {
+  // Init Netlify Identity
+  if(window.netlifyIdentity) {
+    netlifyIdentity.init();
+
+    // Check if already logged in
+    const user = netlifyIdentity.currentUser();
+    if(user) {
+      onLoggedIn(user);
+    }
+
+    // On login
+    netlifyIdentity.on('login', user => {
+      netlifyIdentity.close();
+      onLoggedIn(user);
+    });
+
+    // On logout
+    netlifyIdentity.on('logout', () => {
+      document.getElementById('loginWall').style.display = 'flex';
+      document.getElementById('apiModal').style.display = 'none';
+      document.getElementById('userInfo').style.display = 'none';
+    });
+  } else {
+    // Fallback if Identity not loaded — skip login
+    onLoggedIn(null);
+  }
+
+  document.getElementById('apiKeyInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') saveApiKey();
+  });
+});
+
+function onLoggedIn(user) {
+  // Hide login wall
+  document.getElementById('loginWall').style.display = 'none';
+
+  // Show user info in header
+  if(user) {
+    const ui = document.getElementById('userInfo');
+    const em = document.getElementById('userEmail');
+    if(ui) ui.style.display = 'flex';
+    if(em) em.textContent = user.email.split('@')[0]; // show only username part
+  }
+
+  // Check if API key already saved
   if (apiKey && apiKey.startsWith('sk-ant-')) {
     document.getElementById('apiModal').style.display = 'none';
     document.getElementById('keyLabel').textContent = 'sk-ant-...' + apiKey.slice(-4);
     initApp();
   }
-  document.getElementById('apiKeyInput').addEventListener('keydown', e => {
-    if (e.key === 'Enter') saveApiKey();
-  });
-});
+  // else API modal stays visible
+}
+
+function netlifyLogin() {
+  if(window.netlifyIdentity) {
+    netlifyIdentity.open('login');
+  } else {
+    // Fallback — skip auth
+    onLoggedIn(null);
+  }
+}
+
+function netlifyLogout() {
+  if(window.netlifyIdentity) {
+    netlifyIdentity.logout();
+  }
+  // Clear API key on logout
+  localStorage.removeItem('animacao_apikey');
+  apiKey = '';
+  document.getElementById('loginWall').style.display = 'flex';
+}
 
 // ════════════════════════════════════════════════════════════════
 //  INIT
