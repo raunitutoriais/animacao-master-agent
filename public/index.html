@@ -15,6 +15,12 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--black);color:var(--text);font-family:'Barlow Condensed',sans-serif;font-size:15px;height:100vh;display:flex;flex-direction:column;overflow:hidden;}
 
+/* ── PROVIDER BUTTONS ── */
+.provider-btn{flex:1;padding:10px 6px;background:var(--surface);border:1px solid var(--border);
+  color:var(--text);cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:12px;
+  font-weight:700;letter-spacing:1px;text-align:center;transition:all 0.15s;line-height:1.4;}
+.provider-btn:hover{border-color:var(--accent);color:var(--accent);}
+.provider-btn.active{border-color:var(--accent);background:rgba(232,255,0,0.08);color:var(--accent);}
 /* ── AUTH SCREEN ── */
 #authScreen{position:fixed;inset:0;background:var(--black);display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;}
 .auth-box{background:var(--deep);border:1px solid var(--border);border-top:3px solid var(--accent);padding:40px;width:380px;max-width:92vw;}
@@ -221,13 +227,29 @@ textarea::placeholder{color:var(--muted);}
 
 <!-- API KEY MODAL -->
 <div id="apiModal" style="display:none;position:fixed;inset:0;background:rgba(7,7,9,0.95);align-items:center;justify-content:center;z-index:8888;">
-  <div class="modal-box">
-    <div class="modal-logo">🔑 API KEY ANTHROPIC</div>
-    <div class="modal-sub">Necessário para usar o agente</div>
-    <label class="modal-label">Sua API Key</label>
+  <div class="modal-box" style="max-width:500px;">
+    <div class="modal-logo">🔑 CONFIGURAR API</div>
+    <div class="modal-sub">Escolha o provedor e insira sua key</div>
+
+    <!-- Provider selector -->
+    <div style="display:flex;gap:6px;margin-bottom:16px;">
+      <button class="provider-btn active" id="prov-anthropic" onclick="selectProvider('anthropic')">
+        <span style="font-size:16px;">🟣</span><br>Anthropic<br><span style="font-size:9px;color:var(--muted);">Claude</span>
+      </button>
+      <button class="provider-btn" id="prov-openai" onclick="selectProvider('openai')">
+        <span style="font-size:16px;">⚫</span><br>OpenAI<br><span style="font-size:9px;color:var(--muted);">GPT-4o</span>
+      </button>
+      <button class="provider-btn" id="prov-groq" onclick="selectProvider('groq')">
+        <span style="font-size:16px;">🟠</span><br>Groq<br><span style="font-size:9px;color:var(--muted);">Llama 3</span>
+      </button>
+    </div>
+
+    <div id="providerInfo" style="font-size:10px;color:var(--accent3);font-family:JetBrains Mono,monospace;margin-bottom:10px;padding:6px 8px;background:rgba(0,212,255,0.06);border:1px solid rgba(0,212,255,0.15);"></div>
+
+    <label class="modal-label" id="keyLabel2">Sua API Key</label>
     <input type="password" class="modal-input" id="apiKeyInput" placeholder="sk-ant-api03-..." autocomplete="off">
-    <div class="modal-hint">
-      Obtenha grátis em <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a><br>
+    <div class="modal-hint" id="keyHint">
+      Obtenha em <a href="https://console.anthropic.com" target="_blank" id="keyLink">console.anthropic.com</a><br>
       Salva só no seu navegador — nunca enviada a nenhum servidor.
     </div>
     <button class="modal-btn" onclick="saveApiKey()">▶ CONFIRMAR E COMEÇAR</button>
@@ -247,6 +269,7 @@ textarea::placeholder{color:var(--muted);}
       <span id="userEmail">—</span>
       <button class="logout-btn" onclick="doLogout()">Sair</button>
     </div>
+    <span class="badge" id="providerBadge" style="background:var(--surface);border:1px solid var(--border);color:var(--muted);cursor:pointer;" onclick="document.getElementById('apiModal').style.display='flex';selectProvider(currentProvider);" title="Trocar provedor">🔑 Anthropic</span>
     <span class="badge bl99">L99</span>
     <span class="badge bgod">GOD</span>
     <span class="badge bv6">v6</span>
@@ -327,6 +350,8 @@ const SUPABASE_KEY = 'sb_publishable_8OgKTNc1EvTVo0DK61UJVg_uNiigcKB';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let apiKey = localStorage.getItem('animacao_apikey') || '';
+let currentProvider = localStorage.getItem('animacao_provider') || 'anthropic';
+let currentModel = localStorage.getItem('animacao_model') || 'claude-sonnet-4-6';
 let history = [];
 let isProcessing = false;
 let pendingImages = [];
@@ -423,7 +448,9 @@ function onLoggedIn(user) {
   const em   = document.getElementById('userEmail');
   chip.style.display = 'flex';
   em.textContent = user.email.split('@')[0];
-  if (apiKey && apiKey.startsWith('sk-ant-')) {
+  // Restore provider selection
+  selectProvider(currentProvider);
+  if (apiKey && apiKey.length > 10) {
     document.getElementById('apiModal').style.display = 'none';
     initApp();
   } else {
@@ -432,17 +459,78 @@ function onLoggedIn(user) {
 }
 
 // ════════════════════════════════════════════════════════════════
+//  PROVIDER SELECTION
+// ════════════════════════════════════════════════════════════════
+const PROVIDERS = {
+  anthropic: {
+    name: 'Anthropic Claude',
+    placeholder: 'sk-ant-api03-...',
+    hint: 'console.anthropic.com',
+    link: 'https://console.anthropic.com',
+    model: 'claude-sonnet-4-6',
+    info: 'Modelo: claude-sonnet-4-6 · Melhor qualidade de storytelling',
+    validate: k => k.startsWith('sk-ant-')
+  },
+  openai: {
+    name: 'OpenAI GPT-4o',
+    placeholder: 'sk-proj-...',
+    hint: 'platform.openai.com/api-keys',
+    link: 'https://platform.openai.com/api-keys',
+    model: 'gpt-4o',
+    info: 'Modelo: gpt-4o · Ótimo para criatividade visual',
+    validate: k => k.startsWith('sk-')
+  },
+  groq: {
+    name: 'Groq (Llama 3)',
+    placeholder: 'gsk_...',
+    hint: 'console.groq.com — gratuito com limites generosos',
+    link: 'https://console.groq.com',
+    model: 'llama-3.3-70b-versatile',
+    info: 'Modelo: llama-3.3-70b · Mais rápido e com plano gratuito',
+    validate: k => k.startsWith('gsk_') || k.length > 20
+  }
+};
+
+function selectProvider(prov) {
+  currentProvider = prov;
+  const cfg = PROVIDERS[prov];
+  // Update buttons
+  Object.keys(PROVIDERS).forEach(p => {
+    const btn = document.getElementById('prov-' + p);
+    if(btn) btn.classList.toggle('active', p === prov);
+  });
+  // Update input
+  const input = document.getElementById('apiKeyInput');
+  const hint  = document.getElementById('keyHint');
+  const link  = document.getElementById('keyLink');
+  const info  = document.getElementById('providerInfo');
+  if(input) input.placeholder = cfg.placeholder;
+  if(link)  { link.href = cfg.link; link.textContent = cfg.hint; }
+  if(info)  info.textContent = cfg.info;
+  // Pre-fill if saved
+  const saved = localStorage.getItem('animacao_apikey_' + prov);
+  if(saved && input) input.value = saved;
+  else if(input) input.value = '';
+  document.getElementById('modalError').style.display = 'none';
+}
+
+// ════════════════════════════════════════════════════════════════
 //  API KEY
 // ════════════════════════════════════════════════════════════════
 function saveApiKey() {
   const val = document.getElementById('apiKeyInput').value.trim();
   const err = document.getElementById('modalError');
-  if (!val.startsWith('sk-ant-')) {
-    err.textContent = 'Key inválida — deve começar com sk-ant-';
+  const cfg = PROVIDERS[currentProvider];
+  if (!val || !cfg.validate(val)) {
+    err.textContent = 'Key inválida para ' + cfg.name + '. Verifique e tente novamente.';
     err.style.display = 'block'; return;
   }
   apiKey = val;
+  currentModel = cfg.model;
   localStorage.setItem('animacao_apikey', val);
+  localStorage.setItem('animacao_apikey_' + currentProvider, val);
+  localStorage.setItem('animacao_provider', currentProvider);
+  localStorage.setItem('animacao_model', currentModel);
   document.getElementById('apiModal').style.display = 'none';
   initApp();
 }
@@ -451,6 +539,10 @@ function saveApiKey() {
 //  APP INIT
 // ════════════════════════════════════════════════════════════════
 function initApp() {
+  // Update provider badge
+  const badge = document.getElementById('providerBadge');
+  const provNames = {anthropic:'🟣 Claude', openai:'⚫ GPT-4o', groq:'🟠 Groq'};
+  if(badge) badge.textContent = provNames[currentProvider] || currentProvider;
   document.getElementById('chatMessages').innerHTML = '';
   appendWelcome();
 }
@@ -655,7 +747,7 @@ async function sendToAPI(blocks){
     if(history.length>22) msgs=[...history.slice(0,2),...history.slice(-20)];
     const resp=await fetch('/.netlify/functions/chat',{
       method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({apiKey,messages:msgs})
+      body:JSON.stringify({apiKey, provider:currentProvider, model:currentModel, messages:msgs})
     });
     clearInterval(iv);hideThinking();
     if(!resp.ok){const err=await resp.json().catch(()=>({}));throw new Error(err.error||'Erro '+resp.status);}
